@@ -5,8 +5,9 @@ import bodyParser from 'body-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 
+import router from './routes/index';
+
 const app = express();
-const router = express.Router();
 
 const PORT = process.env.PORT || 3001;
 
@@ -15,12 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger('dev'));
 
-// TODO: Extract all routers to routes dir.
-router.get('/', (req, res) => {
-  res.status(200).send('Welcome to the Wolfgang Digital feedback app.');
-});
-
-app.use('/', router);
+app.use('/api', router);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
