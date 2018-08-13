@@ -3,12 +3,14 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const commentSchema = new Schema({
-    _post: { type: Schema.ObjectId, ref: 'Post' },
-    _author: { type: Schema.ObjectId, ref: 'User' },
+    _author: { type: Schema.ObjectId, ref: 'User', required: true },
+    _parent: { type: Schema.ObjectId, required: true },
+    parentIsPost: { type: Boolean, required: true },
     text: String,
     isDeleted: { type: Boolean, default: false },
-    _children: [{ type: Schema.ObjectId, ref: 'Comment' }]
-}, { timestamp: true });
+    _children: [{ type: Schema.ObjectId, ref: 'Comment' }],
+    _votes: [{ type: Schema.ObjectId, ref: 'Vote' }]
+}, { timestamps: true });
 
 function populateComment(next){
   this.populate({
@@ -20,10 +22,15 @@ function populateComment(next){
     select: 'text _author',
     match: { 'isDeleted': false }
   });
+  this.populate({
+    path: '_votes',
+    select: 'value -_id'
+  });
   next();
 };
 
 commentSchema.pre('find', populateComment)
-             .pre('findOne', populateComment);
+             .pre('findOne', populateComment)
+             .pre('findOneAndUpdate', populateComment);;
 
 export default mongoose.model('Comment', commentSchema);

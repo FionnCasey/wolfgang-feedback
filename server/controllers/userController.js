@@ -7,22 +7,18 @@ userController.create = async (req, res) => {
     const username = email.split('@')[0];
 
     if (email.split('@')[1] !== 'wolfgangdigital.com') {
-      res.status(403).json({
+      return res.status(403).json({
         message: 'Invalid email address.'
       });
-      return;
     }
 
     // TODO: Validate - Encrypt
 
-    const user = new db.User({
-        username,
-        email,
-        password
-    });
+    const user = new db.User({ username, email, password });
+
     try {
         const newUser = await user.save();
-        res.status(200).json({
+        res.status(201).json({
             success: true,
             data: newUser
         });

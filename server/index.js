@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 
-import router from './routes';
+import router from './controllers';
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger('dev'));
 
-app.use('/api', router);
+app.use('/v1', router);
 
 app.listen(PORT, () => console.log(`Running on ${PORT}`));
 

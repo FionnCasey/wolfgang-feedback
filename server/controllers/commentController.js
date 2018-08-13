@@ -2,10 +2,10 @@ import db from '../models';
 
 const commentController = {};
 
-commentController.get = async (req, res) => {
+commentController.getAll = async (req, res) => {
     try {
         const comments = await db.Comment.find({});
-        return res.status(200).json({
+        res.status(200).json({
             success: true,
             data: comments
         });
@@ -17,34 +17,18 @@ commentController.get = async (req, res) => {
 };
 
 commentController.create = async (req, res) => {
-    const {
-        text,
-        userId,
-				postId,
-        parentCommentId
-    } = req.body;
+    const { text, userId, parentId, parentIsPost } = req.body;
 
     // TODO: Validate. JWT..
 
-    const comment = new db.Comment({
-        text,
-				_post: postId,
-        _author: userId
-    });
+    const comment = new db.Comment({ text, parentIsPost, _parent: parentId, _author: userId });
 
     try {
-        let newComment = await comment.save();
-				const parentPost = await db.Post.findByIdAndUpdate(
-					postId,
-					{ $push: { '_children': newComment._id } }
-				);
-        if (parentCommentId) {
-          newComment = await db.Comment.findByIdAndUpdate(
-            parentCommentId,
-            { $push: { '_children': newComment._id } }
-          );
-        }
-        res.status(200).json({
+        const newComment = await comment.save();
+				const parent = parentIsPost ? await db.Post.findById(parentId) : await db.Comment.findById(parentId);
+
+        await parent.update({ $push: { '_children': newComment._id } })
+        res.status(201).json({
             success: true,
             data: newComment
         });
