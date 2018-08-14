@@ -13,6 +13,7 @@ router.get('/', (req, res) => {
 
 // User routes.
 router.post('/register', userController.create);
+router.post('/login', userController.login);
 
 // Post routes.
 router.get('/posts', postController.getAll);
