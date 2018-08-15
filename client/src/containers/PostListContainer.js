@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 
 import { AppContext } from '../ContextProvider';
+import { sortModes } from '../utils';
 import { ListWrapper, PostListItem } from '../components';
 
 class PostListContainer extends Component {
+  state = {
+    sortingMode: sortModes.none
+  };
 
   async componentDidMount() {
   	try {
@@ -16,11 +20,12 @@ class PostListContainer extends Component {
   }
 
   render() {
+    const { sortingMode } = this.state;
     const { posts, error } = this.props;
 
     return (
       <ListWrapper>
-        {posts.map(PostListItem)}
+        { posts.map(PostListItem).sort(sortingMode)}
         <li>{ error }</li>
       </ListWrapper>
     );

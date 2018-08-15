@@ -13,11 +13,14 @@ const countVotes = votes => {
 	}, { up: 0, down: 0, score: 0, numVotes: 0 });
 };
 
-const orderByVotesAsc = list => {
-	return list.sort((a, b) => a._votes.sumVotes() > b._votes.sumVotes() ? 1 : 0);
+const sortModes = {
+	none: (a, b) => 0,
+	orderByScoreDescending: (a, b) => sumVotes(a._votes) > sumVotes(b._votes) ? 1 : -1),
+	orderByScoreAscending: (a, b) => sumVotes(a._votes) < sunVotes(b._votes) ? 1 : -1)
 };
 
 export {
 	sumVotes,
-	countVotes
+	countVotes,
+	sortModes
 };

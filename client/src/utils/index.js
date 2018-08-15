@@ -1,6 +1,7 @@
-import { sumVotes, countVotes } from './array';
+import { sumVotes, countVotes, sortModes } from './array';
 
 export {
 	sumVotes,
-	countVotes
+	countVotes,
+	sortModes
 };
