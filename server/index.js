@@ -4,6 +4,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
+import cors from 'cors';
 
 import router from './controllers';
 
@@ -14,6 +15,7 @@ const PORT = process.env.PORT || 3001;
 // Middleware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
 app.use(logger('dev'));
 
 app.use('/v1', router);

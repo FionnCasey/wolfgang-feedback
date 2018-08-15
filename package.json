@@ -1,13 +1,13 @@
 {
   "name": "wolfgang-feedback",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "",
   "main": "server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:server": "cd server && nodemon index.js --exec babel-node --presets env",
     "start:client": "cd client && npm start",
-    "start:dev": "concurrently \"npm start:server\" \"npm start:client\""
+    "start:dev": "concurrently \"npm run start:server\" \"npm run start:client\""
   },
   "keywords": [],
   "author": "Fionn Casey",
@@ -16,9 +16,11 @@
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "concurrently": "^3.6.1",
+    "cors": "^2.8.4",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.3.0",
+    "lodash": "^4.17.10",
     "mongoose": "^5.2.7",
     "morgan": "^1.9.0",
     "passport": "^0.4.0"
