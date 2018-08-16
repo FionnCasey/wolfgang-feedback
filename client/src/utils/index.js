@@ -1,5 +1,6 @@
 import { sumVotes, countVotes, countChildren, sortModes } from './array';
 import colours from './colours';
+import sizes from './sizes';
 import { capitaliseWord, formatDate } from './format';
 
 export {
@@ -9,5 +10,6 @@ export {
 	countChildren,
 	colours,
 	capitaliseWord,
-	formatDate
+	formatDate,
+	sizes
 };

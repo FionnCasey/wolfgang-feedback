@@ -19,8 +19,7 @@ function populateComment(next){
   });
   this.populate({
     path: '_children',
-    select: 'text _author',
-    match: { 'isDeleted': false }
+    select: 'text _author'
   });
   this.populate({
     path: '_votes',

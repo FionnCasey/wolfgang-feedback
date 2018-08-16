@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
     _author: { type: Schema.ObjectId, ref: 'User', required: true },
+    category: { type: String, default: 'General' },
     title: { type: String, required: true },
     text: String,
     isDeleted: { type: Boolean, default: false },

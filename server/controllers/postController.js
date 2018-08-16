@@ -17,10 +17,10 @@ postController.getAll = async (req, res) => {
 };
 
 postController.getById = async (req, res) => {
-    const { postId } = req.params;
+    const { id } = req.params;
 
     try {
-        const post = await db.Post.findById(postId);
+        const post = await db.Post.findById(id);
 
         if (!post) {
           return res.status(500).json({
@@ -46,13 +46,14 @@ postController.getById = async (req, res) => {
 };
 
 postController.update = async (req, res) => {
-  const { userId, postId, newTitle, newText } = req.body;
+  const { userId, id } = req.params;
+  const { newTitle, newText } = req.body;
 
   try {
-    const { title, text } = await db.Post.findOne({ _id: postId, _author: userId, isDeleted: false });
+    const { title, text } = await db.Post.findOne({ _id: id, _author: userId, isDeleted: false });
 
     const updatedPost = await db.Post.findOneAndUpdate(
-      { _id: postId, _author: userId },
+      { _id: id, _author: userId },
       { title: newTitle || title, text: newText || text },
       { new: true }
     );
@@ -90,11 +91,12 @@ postController.create = async (req, res) => {
 };
 
 postController.delete = async (req, res) => {
-  const { userId, postId } = req.body;
+  const { id } = req.params;
+  const { userId } = req.body;
 
   try {
     await db.Post.findOneAndUpdate({
-      _id: postId, _author: userId
+      _id: id, _author: userId
     }, { isDeleted: true });
 
     res.status(200).json({ success: true });

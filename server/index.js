@@ -6,7 +6,7 @@ import logger from 'morgan';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
-import router from './controllers';
+import router from './routes';
 
 const app = express();
 

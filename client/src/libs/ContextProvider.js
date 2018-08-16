@@ -5,25 +5,16 @@ const AppContext = React.createContext();
 class ContextProvider extends Component {
 
   state = {
-    user: null,
-    viewIndex: -1,
-    posts: [],
-    error: ''
+    user: {},
+    posts: []
   };
 
   render() {
     return (
       <AppContext.Provider value={{
         state: this.state,
-
-				updatePosts: res => {
-					if (res.success) this.setState({ posts: res.data, error: '' });
-					else this.setState({ error: res.message });
-				},
-
-        setViewIndex: viewIndex => this.setState({ viewIndex }),
-
-				throwError: error => this.setState({ error })
+        updateUser: user => this.setState({ user }),
+				updatePosts: posts => this.setState({ posts })
       }}>
         { this.props.children }
       </AppContext.Provider>

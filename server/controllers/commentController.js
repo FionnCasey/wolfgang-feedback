@@ -5,9 +5,10 @@ const commentController = {};
 commentController.getAll = async (req, res) => {
     try {
         const comments = await db.Comment.find({});
+
         res.status(200).json({
             success: true,
-            data: comments
+            data: comments.map(n => n.isDeleted ? { deleted: true, date: n.updatedAt } : n)
         });
     } catch(err) {
         res.status(500).json({

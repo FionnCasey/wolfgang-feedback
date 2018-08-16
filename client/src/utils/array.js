@@ -1,22 +1,35 @@
+import moment from 'moment';
+
 const sumVotes = votes => votes.reduce((total, vote) => total + vote.value, 0) || 0;
 
 const countVotes = votes => {
+	let vals = { up: 0, down: 0, score: 0, numVotes: 0 };
 	return votes.reduce((total, vote) => {
-		if (vote.value > 0) {
-			total.up += vote.value;
-		} else if (vote.value < 0) {
-			total.down += Math.abs(vote.value);
-		}
+		vote.value > 0 ? total.up += vote.value : total.down -= vote.value;
 		total.score += vote.value;
 		total.numVotes++;
 		return total;
-	}, { up: 0, down: 0, score: 0, numVotes: 0 });
+	}, vals) || vals;
 };
 
 const sortModes = {
 	none: (a, b) => 0,
-	orderByScoreDescending: (a, b) => sumVotes(a._votes) > sumVotes(b._votes) ? 1 : -1,
-	orderByScoreAscending: (a, b) => sumVotes(a._votes) < sumVotes(b._votes) ? 1 : -1
+
+	byScoreDescending: (a, b) => sumVotes(a._votes) > sumVotes(b._votes) ? 1 : -1,
+	byScoreAscending: (a, b) => sumVotes(a._votes) < sumVotes(b._votes) ? 1 : -1,
+
+	byCommentsDescending: (a, b) => countChildren(a._children) > countChildren(b._children) ? 1 : -1,
+	byCommentsAscending: (a, b) => countChildren(a._children) < countChildren(b._children) ? 1 : -1
+};
+
+const filterModes = {
+	none: n => true,
+
+	hasPositiveScore: n => sumVotes(n._votes) > 0,
+	hasNegativeScore: n => sumVotes(n._votes) < 0,
+
+	createdLastWeek: n => moment(n.createdAt).isAfter(moment().subtract(7, 'days')),
+	createdLastMonth: n => moment(n.createdAt).isAfter(moment().subtract(1, 'month')),
 };
 
 const countChildren = root => {
