@@ -15,12 +15,19 @@ const countVotes = votes => {
 
 const sortModes = {
 	none: (a, b) => 0,
-	orderByScoreDescending: (a, b) => sumVotes(a._votes) > sumVotes(b._votes) ? 1 : -1),
-	orderByScoreAscending: (a, b) => sumVotes(a._votes) < sunVotes(b._votes) ? 1 : -1)
+	orderByScoreDescending: (a, b) => sumVotes(a._votes) > sumVotes(b._votes) ? 1 : -1,
+	orderByScoreAscending: (a, b) => sumVotes(a._votes) < sumVotes(b._votes) ? 1 : -1
+};
+
+const countChildren = root => {
+  let total = root.length;
+  total += root.reduce((a, n) => a + countChildren(n._children), 0);
+  return total;
 };
 
 export {
 	sumVotes,
 	countVotes,
-	sortModes
+	sortModes,
+	countChildren
 };

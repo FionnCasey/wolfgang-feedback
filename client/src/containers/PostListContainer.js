@@ -25,7 +25,7 @@ class PostListContainer extends Component {
 
     return (
       <ListWrapper>
-        { posts.map(PostListItem).sort(sortingMode)}
+        { posts.map(PostListItem).sort(sortingMode) }
         <li>{ error }</li>
       </ListWrapper>
     );

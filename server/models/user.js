@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import fs from 'fs';
 
 const Schema = mongoose.Schema;
 
@@ -18,7 +19,8 @@ const userSchema = new Schema({
         required: true,
         trim: true,
         minlength: [8, 'Password must be at least 8 characters long.']
-    }
+    },
+    image: { type: String, trim: true }
 });
 
 userSchema.pre('save', function(next) {

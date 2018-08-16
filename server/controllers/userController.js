@@ -1,4 +1,5 @@
 import db from '../models';
+import comparePasswords from '../libs/auth';
 
 const userController = {};
 
@@ -13,15 +14,10 @@ userController.login = async (req, res) => {
         message: `Unable to locate user: ${email}.`
       });
     }
-    if (bcrypt.compareSync(password, user.password)) {
-      const token = jwt.sign(
-        { id: user._id },
-        process.env.JWT_SECRET,
-        { expiresIn: '8h' }
-      );
+    if (comparePasswords(password, user.password)) {
       res.status(200).json({
         success: true,
-        data: { user, token }
+        data: { username: user.username, id: user._id }
       });
     } else {
       res.status(401).json({

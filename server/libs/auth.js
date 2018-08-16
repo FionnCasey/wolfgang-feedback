@@ -47,3 +47,9 @@ const verifyJWTMiddleware = (req, res, next) => {
     });
   });
 };
+
+const comparePasswords = (a, b) => bcrypt.compareSync(a, b);
+
+export {
+  comparePasswords
+};
