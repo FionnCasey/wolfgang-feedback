@@ -46,15 +46,17 @@ postController.getById = async (req, res) => {
 };
 
 postController.update = async (req, res) => {
-  const { userId, id } = req.params;
-  const { newTitle, newText } = req.body;
+  const { id } = req.params;
+  const { userId, newTitle, newText, newCategory } = req.body;
 
   try {
-    const { title, text } = await db.Post.findOne({ _id: id, _author: userId, isDeleted: false });
+    const { title, text, category } = await db.Post.findOne({ _id: id, _author: userId, isDeleted: false });
 
     const updatedPost = await db.Post.findOneAndUpdate(
       { _id: id, _author: userId },
-      { title: newTitle || title, text: newText || text },
+      { title: newTitle || title,
+        text: newText || text,
+        category: newCategory || category },
       { new: true }
     );
 

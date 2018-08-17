@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { AppContext } from '../libs';
 import { sortModes, sizes } from '../utils';
-import { PostListItem } from '../components';
+import { Post, PostListItem } from '../components';
 
 const Wrapper = styled.div`
   padding: ${sizes.top} 0 0 ${sizes.sides};
@@ -38,8 +38,10 @@ class PostContainer extends Component {
   	}
   }
 
+  setViewIndex = viewIndex => this.setState({ viewIndex });
+
   render() {
-    const { sortingMode, loading, error } = this.state;
+    const { sortingMode, loading, viewIndex, error } = this.state;
     const { posts } = this.props;
 
     return (
@@ -47,7 +49,20 @@ class PostContainer extends Component {
         {
           loading ?
             'Loading' :
-            posts.map(PostListItem).sort(sortingMode)
+            viewIndex > -1 ?
+            <Post
+              post={posts[viewIndex]}
+              setViewIndex={this.setViewIndex}
+            />
+            :
+            posts.sort(sortingMode).map((n, i) => (
+              <PostListItem
+                post={n}
+                index={i}
+                setViewIndex={this.setViewIndex}
+                key={`post-${n._id}`}
+              />
+            ))
         }
         <p>{ error }</p>
       </Wrapper>

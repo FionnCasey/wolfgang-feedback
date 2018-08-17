@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   min-height: ${sizes.nav_height};
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
   color: #ffffff;
+  z-index: 5;
 `;
 
 export default class NavContainer extends Component {
@@ -19,7 +20,7 @@ export default class NavContainer extends Component {
 	render() {
 		return(
 			<Wrapper>
-				
+
 			</Wrapper>
 		)
 	}

@@ -42,5 +42,6 @@ export {
 	sumVotes,
 	countVotes,
 	sortModes,
-	countChildren
+	countChildren,
+	filterModes
 };

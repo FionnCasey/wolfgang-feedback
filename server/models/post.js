@@ -19,7 +19,7 @@ function populatePost(next) {
   });
   this.populate({
     path: '_children',
-    select: 'text _author',
+    select: 'text _author createdAt',
     match: { 'isDeleted': false }
   });
   this.populate({

@@ -4,7 +4,10 @@ const colours = {
   grey_1: '#f8f9fa',
   grey_2: '#4f616a',
   grey_3: '#DAE0E6',
-  black: '#393F49'
+  grey_4: '#cbd0d6',
+  black: '#393F49',
+  orange: '#f9a714',
+  blue: '#3293DB'
 };
 
 export default colours;
