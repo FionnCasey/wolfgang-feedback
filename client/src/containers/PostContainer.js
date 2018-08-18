@@ -24,8 +24,13 @@ class PostContainer extends Component {
     error: ''
   };
 
-  async componentDidMount() {
-  	try {
+  componentDidMount() {
+  	 this.updatePosts();
+  }
+
+  updatePosts = async () => {
+    this.setState({ loading: true });
+    try {
   		const res = await fetch('/v1/posts');
   		const json = await res.json();
   		if (json.success) {
@@ -34,9 +39,24 @@ class PostContainer extends Component {
       }
       else this.setState({ error: json.message });
   	} catch (err) {
-  		this.setState({ error: 'Error loading posts.' });
+  		this.setState({ loading: false, error: 'Error loading posts.' });
   	}
-  }
+  };
+
+  updatePost = async (id) => {
+    this.setState({ loading: true });
+    try {
+  		const res = await fetch(`/v1/posts/${id}`);
+  		const json = await res.json();
+  		if (json.success) {
+        this.props.updatePost(json.data);
+        this.setState({ loading: false });
+      }
+      else this.setState({ error: json.message });
+  	} catch (err) {
+  		this.setState({ loading: false, error: err.toString() });
+  	}
+  };
 
   setViewIndex = viewIndex => this.setState({ viewIndex });
 
@@ -53,6 +73,7 @@ class PostContainer extends Component {
             <Post
               post={posts[viewIndex]}
               setViewIndex={this.setViewIndex}
+              updatePost={this.updatePost}
             />
             :
             posts.sort(sortingMode).map((n, i) => (
@@ -72,11 +93,12 @@ class PostContainer extends Component {
 
 export default props => (
   <AppContext.Consumer>
-    {({ state, updatePosts }) => {
+    {({ state, updatePosts, updatePost }) => {
       return <PostContainer
                 {...props}
                 posts={state.posts}
                 updatePosts={updatePosts}
+                updatePost={updatePost}
                 />
     }}
   </AppContext.Consumer>

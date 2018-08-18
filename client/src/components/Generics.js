@@ -3,13 +3,13 @@ import { colours } from '../utils';
 
 const SmallText = styled.span`
   font-size: 12px;
-  color: ${colours.grey_2};
+  color: ${colours.greyscale[3]};
   margin-left: 10px;
 `;
 
 const Title = styled.h1`
   font-size: 18px;
-  color: ${colours.wg_purple};
+  color: ${colours.secondary[1]};
   margin: 0 0 2px 0;
 `;
 

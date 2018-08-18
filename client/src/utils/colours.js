@@ -1,13 +1,25 @@
-const colours = {
-  wg_green: '#31aa65',
-  wg_purple: '#9c2687',
-  grey_1: '#f8f9fa',
-  grey_2: '#4f616a',
-  grey_3: '#DAE0E6',
-  grey_4: '#cbd0d6',
-  black: '#393F49',
-  orange: '#f9a714',
-  blue: '#3293DB'
+export default {
+  primary: [
+    '#31aa65',
+    '#4caa7e',
+  ],
+  secondary: [
+    '#9c2687',
+    '#9e5a8e'
+  ],
+  greyscale: [
+    '#ffffff',
+    '#EFEFEF',
+    '#CBD0D6',
+    '#a4a5a4',
+    '#666666',
+    '#2f3331',
+    '#393f49'
+  ],
+  orange: [
+    '#ffbd72'
+  ],
+  blue: [
+    '#5bc5e5'
+  ]
 };
-
-export default colours;

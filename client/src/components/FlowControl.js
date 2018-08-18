@@ -1,35 +1,49 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ArrowBack } from 'styled-icons/material';
-import { colours, sizes } from '../utils';
+import { ArrowBack, Refresh } from 'styled-icons/material';
+import { colours, sizes, box_shadow, animation } from '../utils';
 
 const Wrapper = styled.div`
-  border: 1px solid ${colours.grey_1};
+  border: 1px solid ${colours.greyscale[1]};
   border-radius: ${sizes.border_radius};
-  background: ${colours.grey_1};
+  background: ${colours.greyscale[0]};
   padding: 5px;
   width: 100%;
   margin-bottom: 8px;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-  color: ${colours.black};
+  box-shadow: ${box_shadow};
+  color: ${colours.greyscale[4]};
   display: inline-block;
 `;
 
 const BackButton = styled(ArrowBack)`
   cursor: pointer;
-  font-weight: bold;
 
-  &:hover,
-  &:active: {
-    color: ${colours.wg_green}
+  &:hover {
+    color: ${colours.secondary[0]};
+    animation: ${animation.slideFadeLeft} 0.5s ease-out;
   }
 `;
 
-export default ({ setViewIndex }) => {
+const RefreshButton = styled(Refresh)`
+  cursor: pointer;
+  margin-left: 5px;
+
+  &:hover {
+    color: ${colours.secondary[0]};
+    animation: ${animation.rotate} .75s ease-out;
+  }
+`;
+
+const LoadingWrapper = styled.div`
+  float: right;
+`;
+
+export default ({ setViewIndex, updatePost, postId, loading }) => {
 
   return (
     <Wrapper>
       <BackButton size={24} onClick={() => setViewIndex(-1)}/>
+      <RefreshButton size={24} onClick={() => updatePost(postId)}/>
     </Wrapper>
   );
 };

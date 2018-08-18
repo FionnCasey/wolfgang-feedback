@@ -19,7 +19,7 @@ function populateComment(next){
   });
   this.populate({
     path: '_children',
-    select: 'text _author'
+    select: 'text _author createdAt updatedAt'
   });
   this.populate({
     path: '_votes',

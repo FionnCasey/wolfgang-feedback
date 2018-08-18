@@ -6,7 +6,8 @@ class ContextProvider extends Component {
 
   state = {
     user: {},
-    posts: []
+    posts: [],
+    error: ''
   };
 
   render() {
@@ -14,7 +15,18 @@ class ContextProvider extends Component {
       <AppContext.Provider value={{
         state: this.state,
         updateUser: user => this.setState({ user }),
-				updatePosts: posts => this.setState({ posts })
+				updatePosts: posts => this.setState({ posts }),
+
+        updatePost: post => {
+          const { posts } = this.state;
+          const index = posts.findIndex(n => n._id === post._id);
+          if (index) {
+            posts.splice(index, 1, post);
+            this.setState({ posts });
+          } else {
+             this.setState({ error: 'Could not find post.' });
+          }
+        }
       }}>
         { this.props.children }
       </AppContext.Provider>
