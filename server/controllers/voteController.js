@@ -6,7 +6,7 @@ voteController.create = async (req, res) => {
   const { userId, parentId, parentIsPost, value } = req.body;
 
   const voteValue = Math.max(-1, Math.min(1, value));
-  
+
   const vote = new db.Vote({ _user: userId, _parent: parentId, parentIsPost, value: voteValue });
 
   try {
@@ -22,7 +22,7 @@ voteController.create = async (req, res) => {
     const parent = parentIsPost ? await db.Post.findById(parentId) : await db.Comment.findById(parentId);
 
     await parent.update({ $push: { '_votes': newVote._id } })
-    res.status(201).json({ success: true });
+    res.status(201).json({ success: true, data: parent });
 
   } catch(err) {
     res.status(500).json({

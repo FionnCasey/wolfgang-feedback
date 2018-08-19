@@ -32,6 +32,7 @@ const filterModes = {
 	createdLastMonth: n => moment(n.createdAt).isAfter(moment().subtract(1, 'month')),
 };
 
+
 const countChildren = root => {
   let total = root.length;
   total += root.reduce((a, n) => a + countChildren(n._children), 0);

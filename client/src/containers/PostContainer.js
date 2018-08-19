@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import { AppContext } from '../libs';
-import { sortModes, sizes } from '../utils';
+import { sortModes, sizes, api } from '../utils';
 import { Post, PostListItem } from '../components';
 
 const Wrapper = styled.div`
@@ -28,34 +28,30 @@ class PostContainer extends Component {
   	 this.updatePosts();
   }
 
-  updatePosts = async () => {
+  updatePosts = () => {
     this.setState({ loading: true });
-    try {
-  		const res = await fetch('/v1/posts');
-  		const json = await res.json();
-  		if (json.success) {
-        this.props.updatePosts(json.data);
+    const { user } = this.props;
+    api.fetchPosts(user)
+      .then(data => {
+        this.props.updatePosts(data);
         this.setState({ loading: false });
-      }
-      else this.setState({ error: json.message });
-  	} catch (err) {
-  		this.setState({ loading: false, error: 'Error loading posts.' });
-  	}
+      })
+      .catch(error => {
+        this.setState({ error, loading: false });
+      });
   };
 
-  updatePost = async (id) => {
+  updatePost = id => {
     this.setState({ loading: true });
-    try {
-  		const res = await fetch(`/v1/posts/${id}`);
-  		const json = await res.json();
-  		if (json.success) {
-        this.props.updatePost(json.data);
+    const { user } = this.props;
+    api.fetchPost(id, user)
+      .then(data => {
+        this.props.updatePost(data);
         this.setState({ loading: false });
-      }
-      else this.setState({ error: json.message });
-  	} catch (err) {
-  		this.setState({ loading: false, error: err.toString() });
-  	}
+      })
+      .catch(error => {
+        this.setState({ error, loading: false });
+      });
   };
 
   setViewIndex = viewIndex => this.setState({ viewIndex });
@@ -96,6 +92,7 @@ export default props => (
     {({ state, updatePosts, updatePost }) => {
       return <PostContainer
                 {...props}
+                user={state.user}
                 posts={state.posts}
                 updatePosts={updatePosts}
                 updatePost={updatePost}

@@ -27,6 +27,11 @@ export default {
        opacity: 0;
      }
    `,
+   slideDown: keyframes`
+    100% {
+      tranform: translateY(10px)
+    }
+   `,
    pulse: keyframes`
      50% {
        transform: scale(1.15);

@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 const Like = styled(ThumbUp)`
   position: relative;
   top: -2px;
-  color: ${colours.greyscale[3]};
+  color: ${props => props.colour};
   margin-left: ${sizes.icon_gap};
   cursor: pointer;
 
@@ -28,7 +28,7 @@ const Like = styled(ThumbUp)`
 const Dislike = styled(ThumbDown)`
   position: relative;
   top: 1px;
-  color: ${colours.greyscale[3]};
+  color: ${props => props.colour};
   margin-left: 5px;
   cursor: pointer;
 
@@ -38,13 +38,21 @@ const Dislike = styled(ThumbDown)`
   }
 `;
 
-export default ({ children, showChildren }) => {
+export default ({ children, showChildren, voteValue, submitVote }) => {
   const text = children.length === 1 ? '1 Reply' : `${children.length} Replies`;
   return (
     <Wrapper>
       <Comment size={16}/> {text}
-      <Like size={17} />
-      <Dislike size={17} />
+      <Like
+        size={17}
+        onClick={() => submitVote(1)}
+        colour={voteValue === 1 ? colours.orange[0] : colours.greyscale[3]}
+       />
+      <Dislike
+        size={17}
+        onClick={() => submitVote(-1)}
+        colour={voteValue === -1 ? colours.blue[0] : colours.greyscale[3]}
+      />
     </Wrapper>
   );
 };

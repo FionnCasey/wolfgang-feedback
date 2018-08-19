@@ -1,26 +1,29 @@
 import db from '../models';
-import comparePasswords from '../libs/auth';
+import { comparePasswords, signJwt } from '../utils';
 
 const userController = {};
 
 userController.login = async (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) return res.status(400).json({ message: 'Missing login details.' });
+
   try {
     const user = await db.User.findOne({ email });
 
     if (!user) {
-      res.status(400).json({
+      return res.status(400).json({
         message: `Unable to locate user: ${email}.`
       });
     }
     if (comparePasswords(password, user.password)) {
-      res.status(200).json({
+      const token = signJwt(user);
+      return res.status(200).json({
         success: true,
-        data: { username: user.username, id: user._id }
+        data: { username: user.username, _id: user._id, token, loggedIn: true }
       });
     } else {
-      res.status(401).json({
+      return res.status(401).json({
         message: 'Incorrect password.'
       });
     }
@@ -33,6 +36,9 @@ userController.login = async (req, res) => {
 
 userController.create = async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password) return res.status(400).json({ message: 'Missing signup details.' });
+
   const username = email.split('@')[0];
 
   if (email.split('@')[1] !== 'wolfgangdigital.com') {
@@ -45,9 +51,10 @@ userController.create = async (req, res) => {
 
   try {
       const newUser = await user.save();
-      res.status(201).json({
+      const token = signJwt(newUser);
+      return res.status(201).json({
           success: true,
-          data: newUser
+          data: { username: newUser.username, _id: newUser._id, token, loggedIn: true }
       });
   } catch (err) {
     res.status(500).json({

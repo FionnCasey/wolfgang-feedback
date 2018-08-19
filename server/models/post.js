@@ -24,7 +24,7 @@ function populatePost(next) {
   });
   this.populate({
     path: '_votes',
-    select: 'value -_id'
+    select: 'value _id, _user'
   });
   next();
 }

@@ -15,7 +15,7 @@ const Wrapper = styled.li`
   box-shadow: ${box_shadow};
   color: ${colours.greyscale[6]};
 
-  animation: ${animation.fadeIn} 0.3s ease-in-out;
+  animation: ${animation.fadeIn} .3s ease-in-out;
 
   &:hover {
     border: 1px solid ${colours.greyscale[6]};
@@ -32,7 +32,7 @@ export default ({ post, index, setViewIndex }) => {
   const { title, _author: { username }, createdAt, _votes, _children } = post;
 
   return (
-    <Wrapper onClick={() => setViewIndex(index)}>
+    <Wrapper onClick={() => setViewIndex(index)} i={index}>
       <Title>{title}</Title>
       <Info>
         { capitaliseWord(username) }

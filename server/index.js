@@ -6,7 +6,8 @@ import logger from 'morgan';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
-import { feedbackApp } from './routes';
+import { auth, feedbackApp } from './routes';
+import { verifyJwt } from './utils';
 
 const app = express();
 
@@ -18,7 +19,10 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(logger('dev'));
 
-app.use('/v1', feedbackApp);
+app.use('/', auth);
+
+// Authorisation required for these routes.
+app.use('/api', verifyJwt, feedbackApp);
 
 app.listen(PORT, () => console.log(`Running on ${PORT}`));
 

@@ -26,7 +26,7 @@ const BackButton = styled(ArrowBack)`
 
 const RefreshButton = styled(Refresh)`
   cursor: pointer;
-  margin-left: 5px;
+  float: right;
 
   &:hover {
     color: ${colours.secondary[0]};

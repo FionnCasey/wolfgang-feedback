@@ -5,7 +5,12 @@ const AppContext = React.createContext();
 class ContextProvider extends Component {
 
   state = {
-    user: {},
+    user: {
+      _id: '',
+      username: '',
+      token: '',
+      loggedIn: false
+    },
     posts: [],
     error: ''
   };
@@ -14,7 +19,22 @@ class ContextProvider extends Component {
     return (
       <AppContext.Provider value={{
         state: this.state,
-        updateUser: user => this.setState({ user }),
+
+        login: user => this.setState({ user }),
+
+        logout: () => {
+          this.setState({
+            user: {
+              _id: '',
+              username: '',
+              token: '',
+              loggedIn: false
+            },
+            posts: [],
+            error: ''
+          });
+        },
+
 				updatePosts: posts => this.setState({ posts }),
 
         updatePost: post => {
