@@ -17,6 +17,7 @@ router.delete('/posts/:id', postController.delete);
 
 // Comment routes.
 router.get('/comments', commentController.getAll);
+router.get('/comments/:id', commentController.getAll);
 router.post('/comments', commentController.create);
 
 // Vote routes.

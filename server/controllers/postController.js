@@ -2,9 +2,13 @@ import db from '../models';
 
 const postController = {};
 
+
 postController.getAll = async (req, res) => {
     try {
-        const posts = await db.Post.find({ isDeleted: false });
+        const posts = await db.Post.find({ isDeleted: false })
+          .populate({
+            path: '_children'
+          });
         return res.status(200).json({
             success: true,
             data: posts

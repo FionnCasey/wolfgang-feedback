@@ -15,16 +15,11 @@ const postSchema = new Schema({
 function populatePost(next) {
   this.populate({
       path: '_author',
-      select: 'username -_id'
-  });
-  this.populate({
-    path: '_children',
-    select: 'text _author createdAt',
-    match: { 'isDeleted': false }
+      select: 'username _id'
   });
   this.populate({
     path: '_votes',
-    select: 'value _id, _user'
+    select: 'value _id _user'
   });
   next();
 }

@@ -17,10 +17,24 @@ commentController.getAll = async (req, res) => {
     }
 };
 
+commentController.getChildComments = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const comments = await db.Post.find({ _parent: id });
+    res.status(200).json({
+      success: true,
+      data: comments
+    });
+  } catch (err) {
+    res.status(500).json({
+        message: err.toString()
+    });
+  }
+};
+
 commentController.create = async (req, res) => {
     const { text, userId, parentId, parentIsPost } = req.body;
-
-    // TODO: Validate. JWT..
 
     const comment = new db.Comment({ text, parentIsPost, _parent: parentId, _author: userId });
 

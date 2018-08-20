@@ -15,11 +15,12 @@ const commentSchema = new Schema({
 function populateComment(next){
   this.populate({
     path: '_author',
-    select: 'username -_id'
+    select: 'username _id'
   });
   this.populate({
     path: '_children',
-    select: 'text _author createdAt updatedAt'
+    select: '_id text _author createdAt updatedAt',
+    match: { isDeleted: false }
   });
   this.populate({
     path: '_votes',
