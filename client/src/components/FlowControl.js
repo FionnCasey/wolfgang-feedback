@@ -9,7 +9,6 @@ const Wrapper = styled.div`
   background: ${colours.greyscale[0]};
   padding: 5px;
   width: 100%;
-  margin-bottom: 8px;
   box-shadow: ${box_shadow};
   color: ${colours.greyscale[4]};
   display: inline-block;
@@ -38,12 +37,12 @@ const LoadingWrapper = styled.div`
   float: right;
 `;
 
-export default ({ setViewIndex, updatePost, postId, loading }) => {
+export default ({ setViewIndex, update, loading, showBack }) => {
 
   return (
     <Wrapper>
-      <BackButton size={24} onClick={() => setViewIndex(-1)}/>
-      <RefreshButton size={24} onClick={() => updatePost(postId)}/>
+      { showBack && <BackButton size={24} onClick={() => setViewIndex(-1)}/> }
+      <RefreshButton size={24} onClick={update}/>
     </Wrapper>
   );
 };

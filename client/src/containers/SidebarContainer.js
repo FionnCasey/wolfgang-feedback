@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { AppContext } from '../libs';
 import { colours, sizes, box_shadow } from '../utils';
+import { SubmitButton } from '../components';
 
 const Wrapper = styled.div`
   min-height: 400px;
@@ -24,7 +25,7 @@ const Wrapper = styled.div`
 
 const Top = styled.div`
   border-radius: ${sizes.border_radius} ${sizes.border_radius} 0 0;
-  height: 38px;
+  height: 36px;
   background: ${colours.primary[1]};
   border: 1px solid ${colours.primary[1]};
   margin: -1px;
@@ -36,6 +37,10 @@ export default class SidebarContainer extends Component {
 		return(
 			<Wrapper>
         <Top />
+        <SubmitButton
+          text='Create Post'
+          onClick={this.props.toggle}
+        />
 			</Wrapper>
 		)
 	}

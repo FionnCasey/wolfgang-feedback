@@ -40,7 +40,7 @@ class Api {
 		});
 	};
 
-	loginUser = (data) => {
+	loginUser = data => {
 		return this.makeRequest({
 			endpoint: '/login',
 			payload: {
@@ -53,7 +53,7 @@ class Api {
 		});
 	};
 
-	signupUser = (data) => {
+	signupUser = data => {
 		return this.makeRequest({
 			endpoint: '/signup',
 			payload: {
@@ -69,6 +69,20 @@ class Api {
 	submitVote = (data, token) => {
 		return this.makeRequest({
 			endpoint: '/api/votes',
+			payload: {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					token
+				},
+				body: JSON.stringify(data)
+			}
+		});
+	};
+
+	createPost = (data, token) => {
+		return this.makeRequest({
+			endpoint: '/api/posts',
 			payload: {
 				method: 'POST',
 				headers: {

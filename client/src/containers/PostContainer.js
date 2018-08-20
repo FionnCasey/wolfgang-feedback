@@ -3,10 +3,11 @@ import styled from 'styled-components';
 
 import { AppContext } from '../libs';
 import { sortModes, sizes, api } from '../utils';
-import { Post, PostListItem } from '../components';
+import { Post, PostListItem, FlowControl } from '../components';
 
 const Wrapper = styled.div`
   padding: ${sizes.top} 0 0 ${sizes.sides};
+  margin-bottom: 10px;
 
   @media (max-width: 1160px) {
 		padding: 10px 0 0 15px;
@@ -59,29 +60,35 @@ class PostContainer extends Component {
   render() {
     const { sortingMode, loading, viewIndex, error } = this.state;
     const { posts } = this.props;
+    const update = viewIndex > -1
+                ? () => this.updatePost(posts[viewIndex]._id)
+                : () => this.updatePosts();
 
     return (
       <Wrapper>
+        <FlowControl
+          setViewIndex={this.setViewIndex}
+          update={update}
+          loading={loading}
+          showBack={viewIndex > -1}
+        />
+        <p>{ error }</p>
+        <p>{ posts.length === 0 && 'No posts to show...' }</p>
         {
-          loading ?
-            'Loading' :
-            viewIndex > -1 ?
+          viewIndex > -1 &&
             <Post
               post={posts[viewIndex]}
               setViewIndex={this.setViewIndex}
               updatePost={this.updatePost}
             />
-            :
-            posts.sort(sortingMode).map((n, i) => (
-              <PostListItem
-                post={n}
-                index={i}
-                setViewIndex={this.setViewIndex}
-                key={`post-${n._id}`}
-              />
-            ))
         }
-        <p>{ error }</p>
+        { (posts && viewIndex === -1) && posts.sort(sortingMode).map((n, i) => (
+          <PostListItem
+            post={n}
+            index={i}
+            setViewIndex={this.setViewIndex}
+            key={`post-${n._id}`}
+          />)) }
       </Wrapper>
     );
   }

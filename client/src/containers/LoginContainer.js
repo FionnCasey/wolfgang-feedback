@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { GridItem } from 'styled-grid-responsive';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { sizes, colours, box_shadow, api } from '../utils';
 import { TextInput, SubmitButton } from '../components';
 import { AppContext } from '../libs';

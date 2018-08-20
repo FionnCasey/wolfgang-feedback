@@ -11,21 +11,26 @@ voteController.create = async (req, res) => {
 
   try {
     const existingVote = await db.Vote.findOne({ _user: userId, _parent: parentId });
+    const parent = parentIsPost ? await db.Post.findById(parentId) : await db.Comment.findById(parentId);
 
     if (existingVote) {
-      return res.status(403).json({
-        message: 'Error: Duplicate vote.'
+      const updatedVote = await db.Vote.findOneAndUpdate(
+        { _user: userId, _parent: parentId },
+        { value: voteValue }
+      );
+      return res.status(200).json({
+        success: true,
+        data: parent
       });
     }
 
     const newVote = await vote.save();
-    const parent = parentIsPost ? await db.Post.findById(parentId) : await db.Comment.findById(parentId);
 
     await parent.update({ $push: { '_votes': newVote._id } })
-    res.status(201).json({ success: true, data: parent });
+    return res.status(200).json({ success: true, data: parent });
 
   } catch(err) {
-    res.status(500).json({
+    return res.status(500).json({
       message: err.toString()
     });
   }

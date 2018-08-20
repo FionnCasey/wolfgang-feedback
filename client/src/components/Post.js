@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import { Title } from './Generics';
 import { colours, sizes, sortModes, box_shadow } from '../utils';
-import FlowControl from './FlowControl';
 import PostInfo from './PostInfo';
 import PostIconBar from './PostIconBar';
 import Comment from './Comment';
@@ -39,12 +38,6 @@ export default class Post extends Component {
 
     return (
           <div>
-            <FlowControl
-              setViewIndex={setViewIndex}
-              updatePost={updatePost}
-              postId={_id}
-              loading={loading}
-            />
             <Wrapper>
               <PostInfo username={username} createdAt={createdAt} />
               <Title>{ title }</Title>

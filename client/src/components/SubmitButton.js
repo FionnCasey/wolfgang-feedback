@@ -21,6 +21,7 @@ const Button = styled.button`
 	animation: ${animation.slideDown} 1s ease-in;
 	transition: all .3s ease-in-out;
 	cursor: pointer;
+	background: ${colours.greyscale[0]};
 
 	&:hover,
 	&:active {

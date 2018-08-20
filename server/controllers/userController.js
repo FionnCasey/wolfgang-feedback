@@ -39,6 +39,13 @@ userController.create = async (req, res) => {
 
   if (!email || !password) return res.status(400).json({ message: 'Missing signup details.' });
 
+  const existing = await db.User.findOne({ email });
+  if (existing) {
+    return res.status(400).json({
+      message: 'Email already exists.'
+    });
+  }
+
   const username = email.split('@')[0];
 
   if (email.split('@')[1] !== 'wolfgangdigital.com') {
