@@ -1,16 +1,29 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import { injectGlobal } from 'styled-components';
+import { UserProvider } from './context';
+import Main from './containers/Main';
 
-const Container = styled.div`
-   
+injectGlobal`
+	@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+	html, body {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: 'Roboto', sans-serif;
+	}
+
+	*, *:before, *:after {
+		box-sizing: inherit;
+	}
 `;
 
 export default class WolfApp extends Component {
   render() {
     return (
-      <Container>
-        <h1>Wolgang Feedback App</h1>
-      </Container>
+      <UserProvider>
+        <Main />
+      </UserProvider>
     );
   }
 }
