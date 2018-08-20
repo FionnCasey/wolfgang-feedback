@@ -14,7 +14,6 @@ injectGlobal`
 		background: ${colours.greyscale[1]}
 		box-sizing: border-box;
 		font-family: 'Roboto', sans-serif;
-		list-style-type: none;
 	}
 
 	*, *:before, *:after {
