@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { injectGlobal } from 'styled-components';
-import { UserProvider } from './context';
+import { ContextProvider } from './context';
 import Main from './containers/Main';
 
 injectGlobal`
@@ -21,9 +21,9 @@ injectGlobal`
 export default class WolfApp extends Component {
   render() {
     return (
-      <UserProvider>
+      <ContextProvider>
         <Main />
-      </UserProvider>
+      </ContextProvider>
     );
   }
 }

@@ -7,6 +7,7 @@ class Api {
     try {
       const res = await fetch(`${this.url}${endpoint}`, payload);
       if (res.ok) return await res.json();
+      return { message: 'Error loading posts.' };
     } catch(err) {
       console.log(err);
     }

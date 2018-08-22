@@ -20,7 +20,7 @@ userController.login = async (req, res) => {
       const token = signJwt(user);
       return res.status(200).json({
         success: true,
-        data: { username: user.username, _id: user._id, token, loggedIn: true }
+        data: { username: user.username, _id: user._id, token }
       });
     } else {
       return res.status(401).json({
@@ -61,7 +61,7 @@ userController.create = async (req, res) => {
       const token = signJwt(newUser);
       return res.status(201).json({
           success: true,
-          data: { username: newUser.username, _id: newUser._id, token, loggedIn: true }
+          data: { username: newUser.username, _id: newUser._id, token }
       });
   } catch (err) {
     res.status(500).json({

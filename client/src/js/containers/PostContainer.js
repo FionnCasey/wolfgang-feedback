@@ -1,19 +1,45 @@
 import React, { Component } from 'react';
-import { GridItem } from 'styled-grid-responsive';
 import { api } from '../utils';
-import { Card } from '../components';
+import { Notification, PostList } from '../components';
+import { withContext } from '../context';
 
-export default class PostContainer extends Component {
+class PostContainer extends Component {
 	state = {
 		index: -1,
-		posts: []
+		posts: [],
+		error: ''
 	};
 
+	async componentDidMount() {
+		const { token } = this.props.context.user;
+		const res = await api.fetchPosts(token);
+		if (res.success) {
+			this.setState({ posts: res.data });
+		} else {
+			this.setState({ error: res.message });
+		}
+	}
+
+	setViewIndex = index => this.setState({ index });
+
 	render() {
+		const { index, posts, error } = this.state;
+
 		return (
-			<GridItem media={{ phone: 1 }} col={3/4}>
-				<Card>Post Container</Card>
-			</GridItem>
+			<div>
+				{
+					index > -1 ?
+						'VIEW POST HERE'
+						:
+						<PostList
+							posts={posts}
+							setViewIndex={this.setViewIndex}
+						/>
+				}
+				<Notification message={error} />
+			</div>
 		);
 	}
 }
+
+export default withContext(PostContainer);

@@ -22,7 +22,8 @@ app.use(logger('dev'));
 app.use('/', auth);
 
 // Authorisation required for these routes.
-app.use('/api', verifyJwt, feedbackApp);
+//app.use('/api', verifyJwt, feedbackApp);
+app.use('/api', feedbackApp);
 
 app.listen(PORT, () => console.log(`Running on ${PORT}`));
 

@@ -20,7 +20,8 @@ const userSchema = new Schema({
         trim: true,
         minlength: [8, 'Password must be at least 8 characters long.']
     },
-    image: { type: String, trim: true }
+    image: { type: String, trim: true },
+    isAdmin: { type: Boolean, default: false }
 });
 
 userSchema.pre('save', function(next) {
