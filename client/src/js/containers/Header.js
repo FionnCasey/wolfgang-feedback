@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { withContext } from '../context';
+import logo from '../../images/awarewolf_logo.svg';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -9,7 +10,7 @@ const Wrapper = styled.div`
   z-index: 10;
   margin: 0;
   padding: 0;
-  background: linear-gradient(#5C9FB8, #57C7B9);
+  background: linear-gradient(#f5cbb9, #51a6bb);
 `;
 
 const Inner = styled.div`
@@ -30,6 +31,12 @@ const Inner = styled.div`
   }
 `;
 
+const Logo = styled.img`
+  margin: 0;
+  padding: 0;
+  width: 80px;
+`;
+
 class Header extends Component {
 
   render() {
@@ -37,6 +44,7 @@ class Header extends Component {
       <Wrapper>
         <Inner>
           <h1>AWAREWOLF</h1>
+          <Logo src={logo}/>
         </Inner>
       </Wrapper>
     );

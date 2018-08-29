@@ -1,7 +1,9 @@
 export default {
-  primary: '#78CCCA',
-  secondary: '#E4D2F2',
+  primary: '#7accc8',
+  secondary: '#e3d1f4',
+  border: '#d1edec',
   grey: [
-    '#AFAFAF'
+    '#676767',
+    '#acacac'
   ]
 };

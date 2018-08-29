@@ -4,8 +4,8 @@ import Card from '../Card';
 import { GridItem } from 'styled-grid-responsive';
 import { colour } from '../../utils';
 
-const MAX_CHARS_HEAD = 40;
-const MAX_CHARS_BODY = 80;
+const MAX_CHARS_HEAD = 60;
+const MAX_CHARS_BODY = 160;
 
 const clipText = (text, isHeader = false) => {
   if (isHeader) {
@@ -15,12 +15,12 @@ const clipText = (text, isHeader = false) => {
   }
 };
 
-const getBorder = i => i % 2 === 0 ? `2px solid ${colour.primary}` : `2px solid ${colour.secondary}`;
+const getBorder = i => i % 2 === 0 ? `2px solid ${colour.secondary}` : `2px solid ${colour.primary}`;
 
 const Header = styled.div`
   border-radius: 3px 3px 0 0;
   height: 40px;
-  color: ${props => props.darkText ? '#333' : '#fff'};
+  color: ${props => props.darkText ? colour.grey[0] : '#fff'};
   background: ${props => props.background || 'white'};
   margin: 0;
   margin-top: -2px;
@@ -45,8 +45,8 @@ export default ({ index, post: { _id, title, text, user, createdAt, comments, vo
       boxShadow='0 2px 4px 0 rgba(0,0,0,0.3)'
     >
       <Header
-        background={index % 2 === 0 ? colour.primary : colour.secondary}
-        darkText={index % 2 !== 0}
+        background={index % 2 === 0 ? colour.secondary : colour.primary}
+        darkText={index % 2 === 0}
       >
         <List><li>{ clipText(title, true) }</li></List>
       </Header>

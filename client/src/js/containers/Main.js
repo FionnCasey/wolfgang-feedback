@@ -17,8 +17,8 @@ const Inner = styled.div`
 	margin: 150px 40px 0 40px;
 	padding: 40px;
 	height: 100%;
-	border-left: 2px solid ${colour.secondary};
-	border-right: 2px solid ${colour.secondary};
+	border-left: 2px solid ${colour.border};
+	border-right: 2px solid ${colour.border};
 `;
 
 class Main extends Component {
