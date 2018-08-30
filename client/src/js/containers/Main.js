@@ -15,10 +15,24 @@ const Outer = styled.div`
 
 const Inner = styled.div`
 	margin: 150px 40px 0 40px;
-	padding: 40px;
-	height: 100%;
 	border-left: 2px solid ${colour.border};
 	border-right: 2px solid ${colour.border};
+	height: 100%;
+	padding: 0;
+
+	color: ${colour.grey[0]};
+
+	@media only screen and (min-width: 2000px) {
+		padding: 0 260px 0 260px;
+	}
+
+	@media only screen and (min-width: 1700px) {
+		padding: 0 180px 0 180px;
+	}
+
+	@media only screen and (max-width: 768px) {
+		margin: 150px 20px 0 20px;
+	}
 `;
 
 class Main extends Component {

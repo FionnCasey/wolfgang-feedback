@@ -5,7 +5,7 @@ import PostListItem from './PostListItem';
 import { Grid } from 'styled-grid-responsive';
 
 const Wrapper = styled.div`
-  
+  padding: 20px 20px 0 20px;
 `;
 
 export default class PostList extends Component {
@@ -15,11 +15,13 @@ export default class PostList extends Component {
 
   render() {
     const { sortMode } = this.state;
-    const List = this.props.posts.sort(sortMode).map((n, i) => (
+    const { posts, setViewIndex } = this.props;
+    const List = posts.sort(sortMode).map((n, i) => (
       <PostListItem
         key={n._id}
         post={n}
         index={i}
+        open={() => setViewIndex(i)}
       />
     ));
 

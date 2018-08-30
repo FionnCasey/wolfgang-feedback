@@ -40,7 +40,7 @@ commentController.create = async (req, res) => {
 
     try {
         const newComment = await comment.save();
-				const parent = parentIsPost ? await db.Post.findById(parentId) : await db.Comment.findById(parentId);
+		    const parent = parentIsPost ? await db.Post.findById(parentId) : await db.Comment.findById(parentId);
 
         await parent.update({ $push: { '_children': newComment._id } })
         res.status(201).json({
