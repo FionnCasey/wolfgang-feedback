@@ -21,6 +21,10 @@ const Item = styled.li`
   position: relative;
   top: ${props => props.top};
 
+  @media only screen and (max-width: 1212px) {
+    margin-left: 5px;
+  }
+
   @media only screen and (max-width: 768px) {
     margin-left: 5px;
   }
@@ -36,6 +40,7 @@ const Comments = styled.div`
   color: ${props => (props.secondary ? colour.grey[0] : '#FFF')};
   border: 1px solid transparent;
   transition: all .3s ease-in-out;
+  cursor: pointer;
 
   &:hover {
     background: #FFF;
@@ -44,23 +49,23 @@ const Comments = styled.div`
   }
 `;
 
-export default ({ secondary, comments, votes }) => {
+export default ({ secondary, comments, votes, isPost, submitVote, id, vote }) => {
   const { up, down } = arrayUtils.countVotes(votes);
   const commentCount = arrayUtils.countChildren(comments);
 
   return (
     <Wrapper>
-      <Item>
+      <Item margin={isPost && '77%'}>
         <Comments secondary={secondary}>{ commentCount } Comments</Comments>
       </Item>
-      <Item margin='38%'>
-        <IconButton icon='like' size={20} secondary={secondary} />
+      <Item margin={isPost ? '45px' : '38%'}>
+        <IconButton icon='like' size={20} secondary={secondary} onClick={submitVote} id={id} isPost={true} vote={vote} />
       </Item>
       <Item margin='4px' top='-4px'>
         { up }
       </Item>
       <Item margin='10px'>
-        <IconButton icon='dislike' secondary={secondary} size={20} />
+        <IconButton icon='dislike' secondary={secondary} size={20} onClick={submitVote} id={id} isPost={true} vote={vote}/>
       </Item>
       <Item margin='4px' top='-4px'>
         { down }

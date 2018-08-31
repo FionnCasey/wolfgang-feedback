@@ -9,15 +9,15 @@ import { colour } from '../utils';
 
 const Outer = styled.div`
 	overflow-x: hidden;
-	height: 100vh;
 	width: 100vw;
 `;
 
 const Inner = styled.div`
-	margin: 150px 40px 0 40px;
+	margin: 150px 57px 0 40px;
 	border-left: 2px solid ${colour.border};
 	border-right: 2px solid ${colour.border};
 	height: 100%;
+	min-height: 100vh;
 	padding: 0;
 
 	color: ${colour.grey[0]};

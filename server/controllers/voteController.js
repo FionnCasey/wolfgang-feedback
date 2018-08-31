@@ -14,7 +14,7 @@ voteController.create = async (req, res) => {
     const parent = parentIsPost ? await db.Post.findById(parentId) : await db.Comment.findById(parentId);
 
     if (existingVote) {
-      const updatedVote = await db.Vote.findOneAndUpdate(
+      await db.Vote.findOneAndUpdate(
         { _user: userId, _parent: parentId },
         { value: voteValue }
       );

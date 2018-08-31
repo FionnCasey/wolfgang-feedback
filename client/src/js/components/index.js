@@ -1,9 +1,10 @@
 import Card from './Card';
 import Notification from './Notification';
-import { PostList } from './posts';
+import { PostList, Post } from './posts';
 
 export {
 	Card,
 	Notification,
-	PostList
+	PostList,
+	Post
 };

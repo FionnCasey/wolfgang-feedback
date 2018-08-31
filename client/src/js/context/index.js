@@ -5,7 +5,7 @@ const Context = React.createContext();
 class ContextProvider extends Component {
 	state = {
 		user: {
-			id: '',
+			id: '5b7a7e0498ecdbfa1e49d118',
 			username: '',
 			token: ''
 		},

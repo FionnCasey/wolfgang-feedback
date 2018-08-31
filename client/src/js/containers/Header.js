@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { withContext } from '../context';
+import { colour } from '../utils';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -39,6 +40,17 @@ const Inner = styled.div`
 	}
 `;
 
+const Slope = styled.div`
+  -webkit-clip-path: polygon(100% 85%, 0% 100%, 100% 100%);
+  clip-path: polygon(100% 85%, 0% 100%, 100% 100%);
+  background: ${colour.secondary};
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: -150px;
+  z-index: -1;
+`;
+
 class Header extends Component {
 
   render() {
@@ -47,6 +59,7 @@ class Header extends Component {
         <Inner>
           <h1>AWAREWOLF</h1>
         </Inner>
+        <Slope />
       </Wrapper>
     );
   }

@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   height: 60px;
   display: flex;
   align-items: center;
+  max-width: ${props => props.maxWidth || 'none'}
 
   h2 {
     font-weight: bold;
@@ -37,10 +38,10 @@ const Image = styled.img`
   top: -1px;
 `;
 
-export default ({ user, createdAt, secondary }) => {
+export default ({ user, createdAt, secondary, maxWidth }) => {
 
   return (
-    <Wrapper secondary={secondary}>
+    <Wrapper secondary={secondary} maxWidth={maxWidth}>
       <Image src={logo} />
       <h2>{ capitaliseWord(user.username) }</h2>
       <p>{ formatDate(createdAt) }</p>

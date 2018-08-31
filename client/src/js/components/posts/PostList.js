@@ -15,13 +15,14 @@ export default class PostList extends Component {
 
   render() {
     const { sortMode } = this.state;
-    const { posts, setViewIndex } = this.props;
+    const { posts, setViewIndex, submitVote } = this.props;
     const List = posts.sort(sortMode).map((n, i) => (
       <PostListItem
         key={n._id}
         post={n}
         index={i}
         open={() => setViewIndex(i)}
+        submitVote={submitVote}
       />
     ));
 

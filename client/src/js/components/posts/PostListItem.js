@@ -1,17 +1,16 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import Card from '../Card';
 import { GridItem } from 'styled-grid-responsive';
-import { colour } from '../../utils';
+import { colour, animation } from '../../utils';
 import ButtonBar from '../ButtonBar';
 import UserBox from '../UserBox';
+import { withContext } from '../../context';
 
 const MAX_CHARS_HEAD = 80;
 const MAX_CHARS_BODY = 160;
 
-
-
-const clipText = (text, isHeader = false) => {
+const clipText = (text, secondary, isHeader = false) => {
   if (isHeader) {
     return text.length > MAX_CHARS_HEAD ? `${text.slice(0, MAX_CHARS_HEAD - 3)} ...` : text;
   } else {
@@ -48,28 +47,69 @@ const Body = styled.div`
   }
 `;
 
+const Wrapper = styled.div`
+  animation: ${props => props.animation} .3s ease-out;
+  animation-fill-mode: forwards;
+`;
+
 const Title = styled.div`
   margin-left: 10px;
 `;
 
-export default ({ open, index, post: { _id, title, text, _author, createdAt, _children, _votes } }) => (
-  <GridItem media={{ phone: 1, tablet: 1/2 }} col={1/3}>
-    <Card
-      border={getBorder(index)}
-      borderRadius='1px'
-      padding='0'
-      boxShadow='0 1px 2px 0 rgba(0,0,0,0.2)'
-      onClick={open}
-    >
-      <Header
-        background={index % 2 === 0 ? colour.secondary : colour.primary}
-        darkText={index % 2 === 0}
-      >
-        &#9679;<Title>{ clipText(title, true) }</Title>
-      </Header>
-      <UserBox user={_author} secondary={index % 2 === 0} createdAt={createdAt} />
-      <Body dangerouslySetInnerHTML={{ __html: clipText(text) }}/>
-      <ButtonBar secondary={index % 2 === 0} comments={_children} votes={_votes}/>
-    </Card>
-  </GridItem>
-);
+class PostListItem extends Component {
+  state = {
+    mouseover: false
+  };
+
+  setMouseOver = mouseover => {
+    this.setState({ mouseover });
+  };
+
+  render() {
+    const { 
+      open, submitVote, index,
+      post: { _id, title, text, _author, createdAt, _children, _votes },
+      context: { user }
+    } = this.props;
+
+    const animate = this.state.mouseover && animation.raise;
+
+    const userVote = _votes.find(n => n._user === user.id);
+    const vote = userVote ? userVote.value : 0;
+
+    return (
+      <GridItem media={{ phone: 1, tablet: 1/2 }} col={1/3}>
+        <Wrapper animation={animate} onMouseOver={() => this.setMouseOver(true)} onMouseOut={() => this.setMouseOver(false)}>
+          <Card
+            fadeIn
+            pointer
+            border={getBorder(index)}
+            borderRadius='1px'
+            padding='0'
+            boxShadow='0 2px 4px 0 rgba(0,0,0,0.2)'
+            onClick={open}
+          >
+            <Header
+              background={index % 2 === 0 ? colour.secondary : colour.primary}
+              darkText={index % 2 === 0}
+            >
+              &#9679;<Title>{ clipText(title, true) }</Title>
+            </Header>
+            <UserBox user={_author} secondary={index % 2 === 0} createdAt={createdAt} />
+            <Body dangerouslySetInnerHTML={{ __html: clipText(text) }}/>
+            <ButtonBar
+              secondary={index % 2 === 0}
+              vote={vote}
+              comments={_children} 
+              votes={_votes} 
+              submitVote={submitVote} 
+              id={_id}
+            />
+          </Card>
+        </Wrapper>
+      </GridItem>
+    );
+  }
+}
+
+export default withContext(PostListItem);

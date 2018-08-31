@@ -15,7 +15,7 @@ const countVotes = votes => {
 const sortModes = {
   none: (a, b) => 0,
   
-  byMostRecent: (a, b) => moment(a.createdAt).isAfter(moment(b.createdAt)),
+  byMostRecent: (a, b) => moment(a.createdAt).isBefore(moment(b.createdAt)),
 
 	byScoreDescending: (a, b) => sumVotes(a._votes) > sumVotes(b._votes),
 	byScoreAscending: (a, b) => sumVotes(a._votes) < sumVotes(b._votes),
@@ -36,6 +36,7 @@ const filterModes = {
 
 
 const countChildren = root => {
+	if (!root) return 0;
   let total = root.length;
   total += root.reduce((a, n) => a + countChildren(n._children), 0);
   return total;
