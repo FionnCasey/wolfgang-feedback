@@ -18,7 +18,7 @@ export default class PostList extends Component {
     const { posts, setViewIndex, submitVote } = this.props;
     const List = posts.sort(sortMode).map((n, i) => (
       <PostListItem
-        key={n._id}
+        key={`post-list-item-${n._id}`}
         post={n}
         index={i}
         open={() => setViewIndex(i)}

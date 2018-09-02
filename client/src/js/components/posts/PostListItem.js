@@ -48,7 +48,7 @@ const Body = styled.div`
 `;
 
 const Wrapper = styled.div`
-  animation: ${props => props.animation} .3s ease-out;
+  animation: ${props => props.animation} .2s ease-in-out;
   animation-fill-mode: forwards;
 `;
 

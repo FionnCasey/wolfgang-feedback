@@ -38,15 +38,6 @@ const Comments = styled.div`
   position: relative;
   background: ${props => (props.secondary ? colour.secondary : colour.primary)};
   color: ${props => (props.secondary ? colour.grey[0] : '#FFF')};
-  border: 1px solid transparent;
-  transition: all .3s ease-in-out;
-  cursor: pointer;
-
-  &:hover {
-    background: #FFF;
-    border: 1px solid ${props => (props.secondary ? colour.secondary : colour.primary)};
-    color: ${colour.grey[0]};
-  }
 `;
 
 export default ({ secondary, comments, votes, isPost, submitVote, id, vote }) => {

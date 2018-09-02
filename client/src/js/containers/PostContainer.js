@@ -11,12 +11,21 @@ class PostContainer extends Component {
 	};
 
 	async componentDidMount() {
-		const { token } = this.props.context.user;
-		const res = await api.fetchPosts(token);
-		if (res.success) {
-			this.setState({ posts: res.data });
-		} else {
-			this.setState({ error: res.message });
+		await this.updatePosts();
+	}
+
+	async updatePosts() {
+		try {
+			const { token } = this.props.context.user;
+			const res = await api.fetchPosts(token);
+			if (res.success) {
+				this.setState({ posts: res.data });
+			} else {
+				this.setState({ error: res.message });
+				console.log(res.message);
+			}
+		} catch (err) {
+			console.log(err);
 		}
 	}
 
@@ -38,9 +47,9 @@ class PostContainer extends Component {
 			value
 		});
 		if (res.success) {
-			const { posts } = this.state;
-			const updated = posts.map(n => n._id === res.data._id ? res.data : n);
-			this.setState({ posts: updated }, () => console.log('updated'));
+			await this.updatePosts();
+		} else {
+			console.log(res.message);
 		}
 	};
 

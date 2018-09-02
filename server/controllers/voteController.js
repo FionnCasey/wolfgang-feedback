@@ -16,7 +16,7 @@ voteController.create = async (req, res) => {
     if (existingVote) {
       await db.Vote.findOneAndUpdate(
         { _user: userId, _parent: parentId },
-        { value: voteValue }
+        { value: voteValue === existingVote.value ? 0 : value }
       );
       return res.status(200).json({
         success: true,
@@ -27,7 +27,7 @@ voteController.create = async (req, res) => {
     const newVote = await vote.save();
 
     await parent.update({ $push: { '_votes': newVote._id } })
-    return res.status(200).json({ success: true, data: parent });
+    return res.status(200).json({ success: true });
 
   } catch(err) {
     return res.status(500).json({
