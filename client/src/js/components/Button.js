@@ -20,7 +20,7 @@ const Button = styled.div`
   }
 `;
 
-export default ({ text, size, bold, fontSize, borderRadius, padding, secondary }) => (
+export default ({ text, size, bold, fontSize, borderRadius, padding, secondary, onClick }) => (
   <Button
     size={size}
     secondary={secondary}
@@ -28,6 +28,7 @@ export default ({ text, size, bold, fontSize, borderRadius, padding, secondary }
     borderRadius={borderRadius}
     padding={padding}
     fontSize={fontSize}
+    onClick={onClick}
   >
    { text }
   </Button>

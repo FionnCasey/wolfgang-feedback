@@ -19,8 +19,7 @@ voteController.create = async (req, res) => {
         { value: voteValue === existingVote.value ? 0 : value }
       );
       return res.status(200).json({
-        success: true,
-        data: parent
+        success: true
       });
     }
 

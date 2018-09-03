@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { arrayUtils } from '../../utils';
 import PostListItem from './PostListItem';
 import { Grid } from 'styled-grid-responsive';
+import ControlPanel from '../ControlPanel';
 
 const Wrapper = styled.div`
   padding: 20px 20px 0 20px;
@@ -28,6 +29,7 @@ export default class PostList extends Component {
 
     return (
       <Wrapper>
+        <ControlPanel />
         <Grid>{ List }</Grid>
       </Wrapper>
     );
