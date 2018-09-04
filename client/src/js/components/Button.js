@@ -13,6 +13,8 @@ const Button = styled.div`
   border: 1px solid transparent;
   transition: all .4s ease-in-out;
   cursor: pointer;
+  width: ${props => props.width};
+  height: ${props => props.height};
 
   &:hover {
     border: 1px solid ${props => (props.secondary ? colour.secondary : colour.primary)};
@@ -20,9 +22,10 @@ const Button = styled.div`
   }
 `;
 
-export default ({ text, size, bold, fontSize, borderRadius, padding, secondary, onClick }) => (
+export default ({ text, height, width, bold, fontSize, borderRadius, padding, secondary, onClick }) => (
   <Button
-    size={size}
+    width={width}
+    height={height}
     secondary={secondary}
     bold={bold}
     borderRadius={borderRadius}
