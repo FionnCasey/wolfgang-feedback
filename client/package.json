@@ -5,6 +5,7 @@
   "dependencies": {
     "css-loader": "^1.0.0",
     "draft-js": "^0.10.5",
+    "draft-js-export-html": "^1.2.0",
     "draft-js-plugins-editor": "^2.1.1",
     "draft-js-static-toolbar-plugin": "^2.0.2",
     "moment": "^2.22.2",

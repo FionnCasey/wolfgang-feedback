@@ -23,6 +23,10 @@ const Wrapper = styled.div`
     background: #FFF;
     color: ${props => (props.secondary ? colour.secondary : colour.primary)};
     border: 1px solid ${props => (props.secondary ? colour.secondary : colour.primary)};
+
+    svg {
+      fill: ${props => (props.secondary ? colour.secondary : colour.primary)};
+    }
   }
 `;
 

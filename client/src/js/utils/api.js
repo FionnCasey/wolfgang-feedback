@@ -104,7 +104,21 @@ class Api {
 				body: JSON.stringify(data)
 			}
 		});
-	};
+  };
+  
+  createComment = (data, token) => {
+    return this.makeRequest({
+			endpoint: '/api/comments',
+			payload: {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					token
+				},
+				body: JSON.stringify(data)
+			}
+		});
+  };
 }
 
 const api = new Api();

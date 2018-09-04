@@ -4,7 +4,8 @@ import Button from './Button';
 import Editor, { createEditorStateWithText } from 'draft-js-plugins-editor';
 import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
 import 'draft-js-static-toolbar-plugin/lib/plugin.css';
-import { colour } from '../utils';
+import { colour, animation } from '../utils';
+import { stateToHTML } from 'draft-js-export-html';
 
 const staticToolbarPlugin = createToolbarPlugin();
 
@@ -14,7 +15,8 @@ const plugins = [staticToolbarPlugin];
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
+  animation: ${animation.fadeIn} .3s ease-in-out;
 `;
 
 const TextWrapper = styled.div`
@@ -36,6 +38,7 @@ const ToolbarWrapper = styled.div`
   border-left: 1px solid ${colour.primary}
   border-right: 1px solid ${colour.primary}
   border-bottom: 1px solid ${colour.primary}
+  overflow: hidden;
 
   div {
     background: ${colour.primary};
@@ -67,7 +70,20 @@ const ToolbarWrapper = styled.div`
 
 const Btn = styled.span`
   cursor: pointer;
-  height: 100%;
+  position: relative;
+  top: 3px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: 20px;
+  color: #FFF;
+  height: 100%
+  padding: 5px 10px;
+  border-radius: 2px;
+  
+  &:hover {
+    background: #a0e8e4;
+  }
 `;
 
 export default class TextEditor extends Component {
@@ -84,6 +100,14 @@ export default class TextEditor extends Component {
   onChange = editorState => this.setState({ editorState });
 
   focus = () => this.editor.focus();
+
+  createComment = () => {
+    const { editorState } = this.state;
+    const text = stateToHTML(editorState.getCurrentContent());
+    const strippedText = text.replace('<p>', '').replace('</p>', '');
+    this.props.submitComment(this.props.id, strippedText);
+    this.toggleEditor();
+  };
 
   render() {
     const { open, editorState } = this.state;
@@ -103,7 +127,7 @@ export default class TextEditor extends Component {
               </TextWrapper>
               <ToolbarWrapper>
                 <Toolbar />
-                <Btn>Post</Btn>
+                <Btn onClick={this.createComment}>Submit Comment</Btn>
               </ToolbarWrapper>
             </EditorWrapper>
             :

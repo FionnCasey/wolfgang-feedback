@@ -29,7 +29,10 @@ class PostContainer extends Component {
 		}
 	}
 
-	setViewIndex = index => this.setState({ index });
+	setViewIndex = index => {
+		this.setState({ index });
+		window.scrollTo(0, 0);
+	};
 
 	submitVote = async (_id, value, isPost) => {
 		const { id, token } = this.props.context.user;
@@ -37,6 +40,12 @@ class PostContainer extends Component {
 			console.log('Must be logged in.');
 			// TODO: Handle this.
 			//return;
+		}
+
+		const { index, posts } = this.state;
+		let savedId;
+		if (index > -1) {
+			savedId = posts[index]._id;
 		}
 
 		const res = await api.submitVote({
@@ -48,6 +57,34 @@ class PostContainer extends Component {
 		});
 		if (res.success) {
 			await this.updatePosts();
+			if (savedId) {
+				const index = this.state.posts.findIndex(n => n._id === savedId);
+				this.setState({ index });
+			}
+		} else {
+			console.log(res.message);
+		}
+	};
+
+	submitComment = async (_id, text) => {
+		const { id, token } = this.props.context.user;
+		if (!id || !token) {
+			console.log('Must be logged in.');
+			// TODO: Handle this.
+			//return;
+		}
+
+		const res = await api.createComment({
+			userId: id,
+			token,
+			parentId: _id,
+			parentIsPost: true,
+			text
+		});
+		if (res.success) {
+			await this.updatePosts();
+			const index = this.state.posts.findIndex(n => n._id === res.data._id);
+			this.setState({ index });
 		} else {
 			console.log(res.message);
 		}
@@ -63,6 +100,8 @@ class PostContainer extends Component {
 						<Post
 							post={posts[index]}
 							submitVote={this.submitVote}
+							submitComment={this.submitComment}
+							back={() => this.setViewIndex(-1)}
 						/>
 						:
 						<PostList

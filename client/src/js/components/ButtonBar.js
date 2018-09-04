@@ -49,7 +49,7 @@ export default ({ secondary, comments, votes, isPost, submitVote, id, vote }) =>
       <Item margin={isPost && '77%'}>
         <Comments secondary={secondary}>{ commentCount } Comments</Comments>
       </Item>
-      <Item margin={isPost ? '45px' : '38%'}>
+      <Item margin={isPost ? '30px' : '35%'}>
         <IconButton icon='like' size={20} secondary={secondary} onClick={submitVote} id={id} isPost={true} vote={vote} />
       </Item>
       <Item margin='4px' top='-4px'>

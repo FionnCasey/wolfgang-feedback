@@ -15,7 +15,7 @@ const countVotes = votes => {
 const sortModes = {
   none: (a, b) => 0,
   
-  byMostRecent: (a, b) => moment(a.createdAt).isBefore(moment(b.createdAt)),
+  byMostRecent: (a, b) => moment(a.createdAt).isBefore(moment(b.createdAt)) ? 1 : -1,
 
 	byScoreDescending: (a, b) => sumVotes(a._votes) > sumVotes(b._votes),
 	byScoreAscending: (a, b) => sumVotes(a._votes) < sumVotes(b._votes),

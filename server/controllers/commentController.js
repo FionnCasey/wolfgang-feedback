@@ -45,7 +45,7 @@ commentController.create = async (req, res) => {
         await parent.update({ $push: { '_children': newComment._id } })
         res.status(201).json({
             success: true,
-            data: newComment
+            data: parent
         });
     } catch (err) {
         res.status(500).json({

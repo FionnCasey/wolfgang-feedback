@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { colour } from '../../utils';
+import { colour, arrayUtils } from '../../utils';
 import Card from '../Card';
 import UserBox from '../UserBox';
 import ButtonBar from '../ButtonBar';
 import TextEditor from '../TextEditor';
 import Comment from '../Comment';
+import PostNav from './PostNav';
 
 const Header = styled.div`
   border-radius: 1px 2px 0 0;
@@ -21,7 +22,7 @@ const Header = styled.div`
 `;
 
 const Wrapper = styled.div`
-  padding: 25px;
+  padding: 10px 25px 25px 25px;
 `;
 
 const Title = styled.div`
@@ -34,8 +35,12 @@ const Body = styled.div`
   margin-top: 5px;
 `;
 
-export default ({ post: { title, text, _author, createdAt, _children, _votes } }) => (
+export default ({ 
+  submitComment, submitVote, back,
+  post: { _id, title, text, _author, createdAt, _children, _votes }
+}) => (
   <Wrapper>
+    <PostNav back={back} />
    <Card
       fadeIn
       border={`2px solid ${colour.secondary}`}
@@ -49,11 +54,17 @@ export default ({ post: { title, text, _author, createdAt, _children, _votes } }
       </Header>
       <UserBox secondary user={_author} createdAt={createdAt} maxWidth='300px' />
       <Body dangerouslySetInnerHTML={{ __html: text }}/>
-      <ButtonBar secondary comments={_children} votes={_votes} isPost/>
+      <ButtonBar secondary comments={_children} votes={_votes} isPost submitVote={submitVote}/>
     </Card>
-    <TextEditor />
+    <TextEditor submitComment={submitComment} id={_id}/>
     {
-      _children.map(Comment)
+      _children.sort(arrayUtils.sortModes.byMostRecent).map(n => (
+        <Comment
+          key={`comment-${n._id}`}
+          comment={n}
+          submitVote={submitVote}
+        />
+      ))
     }
   </Wrapper>
 );
