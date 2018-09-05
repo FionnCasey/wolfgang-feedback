@@ -35,6 +35,14 @@ const Body = styled.div`
   margin-top: 5px;
 `;
 
+const getUserVoteValue = (id, votes) => {
+  const vote = votes.filter(n => n._user === id)[0];
+  if (vote) {
+    return vote.value;
+  }
+  return 0;
+};
+
 export default ({ 
   submitComment, submitVote, back,
   post: { _id, title, text, _author, createdAt, _children, _votes }
@@ -54,7 +62,15 @@ export default ({
       </Header>
       <UserBox secondary user={_author} createdAt={createdAt} maxWidth='300px' />
       <Body dangerouslySetInnerHTML={{ __html: text }}/>
-      <ButtonBar secondary comments={_children} votes={_votes} isPost submitVote={submitVote}/>
+      <ButtonBar
+        id={_id}
+        secondary
+        comments={_children}
+        votes={_votes} 
+        isPost 
+        submitVote={submitVote}
+        vote={getUserVoteValue(_author._id, _votes)}
+      />
     </Card>
     <TextEditor submitComment={submitComment} id={_id}/>
     {

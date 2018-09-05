@@ -5,7 +5,7 @@ const Context = React.createContext();
 class ContextProvider extends Component {
 	state = {
 		user: {
-			id: '5b7a7e0498ecdbfa1e49d118',
+			id: '',
 			username: '',
 			token: ''
 		},
@@ -13,12 +13,14 @@ class ContextProvider extends Component {
 	};
 
 	componentWillMount() {
-		const user = sessionStorage.getItem('wolfganger');
-		if (user) this.setState({
+		const id = sessionStorage.getItem('wg_id');
+		const username = sessionStorage.getItem('wg_user');
+		const token = sessionStorage.getItem('wg_token');
+		if (id && username && token) this.setState({
 			user: {
-				id: user.id,
-				username: user.username,
-				token: user.token
+				id,
+				username,
+				token
 			}
 		});
 	}
@@ -29,12 +31,19 @@ class ContextProvider extends Component {
 				user: {
 					...this.state.user,
 					loggedIn: () => {
-						const { id, username, token } = this.state;
+						const { id, username, token } = this.state.user;
 						return id && username && token;
 					},
 					login: user => {
-						this.setState({ user });
-						sessionStorage.setItem('wolfganger', user);
+						const newUser = {
+							id: user._id,
+							username: user.username,
+							token: user.token
+						}
+						this.setState({ user: newUser });
+						sessionStorage.setItem('wg_id', user._id);
+						sessionStorage.setItem('wg_user', user.username);
+						sessionStorage.setItem('wg_token', user.token);
 					},
 					logout: () => {
 						this.setState({

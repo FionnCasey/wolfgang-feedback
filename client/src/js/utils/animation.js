@@ -21,5 +21,15 @@ export default {
      100% {
       transform: translateY(-5px);
      }
+  `,
+  raiseHigher: keyframes`
+    100% {
+      transform: translateY(-22px);
+    }
+  `,
+  lower: keyframes`
+    0% {
+      transform: translateY(0);
+    }
   `
 };

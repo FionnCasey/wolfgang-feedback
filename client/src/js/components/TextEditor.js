@@ -6,11 +6,14 @@ import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
 import 'draft-js-static-toolbar-plugin/lib/plugin.css';
 import { colour, animation } from '../utils';
 import { stateToHTML } from 'draft-js-export-html';
+import { RichUtils } from 'draft-js';
 
 const staticToolbarPlugin = createToolbarPlugin();
 
 const { Toolbar } = staticToolbarPlugin;
 const plugins = [staticToolbarPlugin];
+
+const MAX_LENGTH = 1000;
 
 const Wrapper = styled.div`
   display: flex;
@@ -24,7 +27,7 @@ const TextWrapper = styled.div`
   cursor: text;
   border-radius: 1px 1px 0 0;
   background: #FFF;
-  height: 140px;
+  min-height: 140px;
   padding: 12px;
 `;
 
@@ -56,6 +59,7 @@ const ToolbarWrapper = styled.div`
     vertical-align: bottom;
     height: 34px;
     width: 36px;
+    cursor: pointer;
   }
   
   button svg {
@@ -109,6 +113,63 @@ export default class TextEditor extends Component {
     this.toggleEditor();
   };
 
+  _handleKeyCommand = (command, editorState) => {
+    const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (newState) {
+      this.onChange(newState);
+      return 'handled';
+    }
+    return 'not-handled';
+  };
+
+  _getLengthOfSelectedText = () => {
+    const { editorState } = this.state;
+    const currentSelection = editorState.getSelection();
+    const isCollapsed = currentSelection.isCollapsed();
+
+    let length = 0;
+
+    if (!isCollapsed) {
+      const currentContent = this.state.editorState.getCurrentContent();
+      const startKey = currentSelection.getStartKey();
+      const endKey = currentSelection.getEndKey();
+      const startBlock = currentContent.getBlockForKey(startKey);
+      const isStartAndEndBlockAreTheSame = startKey === endKey;
+      const startBlockTextLength = startBlock.getLength();
+      const startSelectedTextLength = startBlockTextLength - currentSelection.getStartOffset();
+      const endSelectedTextLength = currentSelection.getEndOffset();
+      const keyAfterEnd = currentContent.getKeyAfter(endKey);
+
+      if (isStartAndEndBlockAreTheSame) {
+        length += currentSelection.getEndOffset() - currentSelection.getStartOffset();
+      } else {
+        let currentKey = startKey;
+
+        while (currentKey && currentKey !== keyAfterEnd) {
+          if (currentKey === startKey) {
+            length += startSelectedTextLength + 1;
+          } else if (currentKey === endKey) {
+            length += endSelectedTextLength;
+          } else {
+            length += currentContent.getBlockForKey(currentKey).getLength() + 1;
+          }
+          currentKey = currentContent.getKeyAfter(currentKey);
+        }
+      }
+    }
+    return length;
+  };
+
+  _handleBeforeInput = () => {
+    const currentContent = this.state.editorState.getCurrentContent();
+    const currentContentLength = currentContent.getPlainText('').length;
+    const selectedTextLength = this._getLengthOfSelectedText();
+
+    if (currentContentLength - selectedTextLength > MAX_LENGTH - 1) {
+      return 'handled';
+    }
+  };
+
   render() {
     const { open, editorState } = this.state;
 
@@ -119,6 +180,8 @@ export default class TextEditor extends Component {
             <EditorWrapper>
               <TextWrapper onClick={this.focus}>
                 <Editor
+                  handleBeforeInput={this._handleBeforeInput}
+                  handleKeyCommand={this._handleKeyCommand}
                   editorState={editorState}
                   onChange={this.onChange}
                   plugins={plugins}

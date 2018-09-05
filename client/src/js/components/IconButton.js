@@ -8,7 +8,10 @@ const Wrapper = styled.div`
   border-radius: 50%;
   height: ${props => props.size};
   width: ${props => props.size};
-  background: ${props => (props.secondary ? colour.secondary : colour.primary)};
+  background: ${props => (
+    props.highlight ? props.secondary ? colour.secondaryHighlight : colour.primaryHighlight :
+    props.secondary ? colour.secondary : colour.primary
+  )};
   color: #FFF;
   padding: 5px;
   display: flex;
@@ -21,11 +24,20 @@ const Wrapper = styled.div`
 
   &:hover {
     background: #FFF;
-    color: ${props => (props.secondary ? colour.secondary : colour.primary)};
-    border: 1px solid ${props => (props.secondary ? colour.secondary : colour.primary)};
+    color: ${props => (
+      props.highlight ? props.secondary ? colour.secondaryHighlight : colour.primaryHighlight :
+      props.secondary ? colour.secondary : colour.primary
+    )};
+    border: 1px solid ${props => (
+      props.highlight ? props.secondary ? colour.secondaryHighlight : colour.primaryHighlight :
+      props.secondary ? colour.secondary : colour.primary
+    )};
 
     svg {
-      fill: ${props => (props.secondary ? colour.secondary : colour.primary)};
+      fill: ${props => (
+        props.highlight ? props.secondary ? colour.secondaryHighlight : colour.primaryHighlight :
+        props.secondary ? colour.secondary : colour.primary
+      )};
     }
   }
 `;
@@ -61,8 +73,9 @@ export default ({ icon, size, secondary, onClick, id, isPost, vote }) => {
   const highlight = vote === value;
 
   return (
-    <Outer highlight={highlight} size={size + 11} secondary={secondary}>
+    <Outer highlight={false} size={size + 11} secondary={secondary}>
     <Wrapper
+      highlight={highlight}
       secondary={secondary}
       size={`${size + 5}px`}
       onClick={e => e.stopPropagation() & onClick(id, value, isPost)}

@@ -16,7 +16,8 @@ export default class PostList extends Component {
 
   render() {
     const { sortMode } = this.state;
-    const { posts, setViewIndex, submitVote } = this.props;
+    const { posts, setViewIndex, submitVote, setView } = this.props;
+
     const List = posts.sort(sortMode).map((n, i) => (
       <PostListItem
         key={`post-list-item-${n._id}`}
@@ -29,7 +30,7 @@ export default class PostList extends Component {
 
     return (
       <Wrapper>
-        <ControlPanel />
+        <ControlPanel setView={setView} />
         <Grid>{ List }</Grid>
       </Wrapper>
     );

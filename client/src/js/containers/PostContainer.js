@@ -50,11 +50,10 @@ class PostContainer extends Component {
 
 		const res = await api.submitVote({
 			userId: id,
-			token,
 			parentId: _id,
 			parentIsPost: isPost,
 			value
-		});
+		}, token);
 		if (res.success) {
 			await this.updatePosts();
 			if (savedId) {
@@ -76,11 +75,10 @@ class PostContainer extends Component {
 
 		const res = await api.createComment({
 			userId: id,
-			token,
 			parentId: _id,
 			parentIsPost: true,
 			text
-		});
+		}, token);
 		if (res.success) {
 			await this.updatePosts();
 			const index = this.state.posts.findIndex(n => n._id === res.data._id);
@@ -92,6 +90,7 @@ class PostContainer extends Component {
 
 	render() {
 		const { index, posts, error } = this.state;
+		const { setView } = this.props;
 
 		return (
 			<div>
@@ -105,6 +104,7 @@ class PostContainer extends Component {
 						/>
 						:
 						<PostList
+							setView={setView}
 							posts={posts}
 							submitVote={this.submitVote}
 							setViewIndex={this.setViewIndex}

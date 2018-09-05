@@ -5,5 +5,7 @@ export default {
   grey: [
     '#676767',
     '#acacac'
-  ]
+  ],
+  primaryHighlight: '#3ebc72',
+  secondaryHighlight: '#bf3da7'
 };

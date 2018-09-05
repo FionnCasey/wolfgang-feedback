@@ -46,9 +46,9 @@ const FilterIcon = styled(Filter)`
   left: -12px;
 `;
 
-export default props => (
+export default ({ setView }) => (
   <Wrapper>
-    <Button>
+    <Button onClick={() => setView('CREATE_POST')} >
       <IdeaIcon size={22}/>
       POST IDEA
     </Button>
