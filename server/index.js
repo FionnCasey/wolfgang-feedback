@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import path from 'path';
 
 import { auth, feedbackApp } from './routes';
 import { verifyJwt } from './utils';
