@@ -39,7 +39,7 @@ class PostContainer extends Component {
 		if (!id || !token) {
 			console.log('Must be logged in.');
 			// TODO: Handle this.
-			//return;
+			return;
 		}
 
 		const { index, posts } = this.state;
@@ -47,6 +47,7 @@ class PostContainer extends Component {
 		if (index > -1) {
 			savedId = posts[index]._id;
 		}
+		let newPosts = [...posts];
 
 		const res = await api.submitVote({
 			userId: id,
@@ -55,10 +56,14 @@ class PostContainer extends Component {
 			value
 		}, token);
 		if (res.success) {
+			console.log(res);
+			newPosts.splice(newPosts.findIndex(n => n._id === savedId), 1, res.data);
+			this.setState({ posts: newPosts });
+
 			await this.updatePosts();
 			if (savedId) {
-				const index = this.state.posts.findIndex(n => n._id === savedId);
-				this.setState({ index });
+				const viewIndex = this.state.posts.findIndex(n => n._id === savedId);
+				this.setState({ index: viewIndex });
 			}
 		} else {
 			console.log(res.message);
@@ -70,7 +75,7 @@ class PostContainer extends Component {
 		if (!id || !token) {
 			console.log('Must be logged in.');
 			// TODO: Handle this.
-			//return;
+			return;
 		}
 
 		const res = await api.createComment({

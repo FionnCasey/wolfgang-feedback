@@ -54,8 +54,8 @@ class CreatePost extends Component {
   };
 
   submitPost = async text => {
-    if (this.state.title.length < 6 || text.length < 6) {
-      // TODO: error..
+    if (this.state.title.length < 1 || text.length < 1) {
+      console.log('Title or body text is too short');
       return;
     }
 

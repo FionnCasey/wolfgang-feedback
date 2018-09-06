@@ -1,6 +1,6 @@
 class Api {
   constructor() {
-    this.url = 'http://localhost:3001';
+    this.url = 'https://wolfgang-api.herokuapp.com';
   }
 
   makeRequest = async ({ endpoint, payload }) => {

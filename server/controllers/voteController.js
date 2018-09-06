@@ -19,14 +19,15 @@ voteController.create = async (req, res) => {
         { value: voteValue === existingVote.value ? 0 : value }
       );
       return res.status(200).json({
-        success: true
+        success: true,
+        data: parent
       });
     }
 
     const newVote = await vote.save();
 
     await parent.update({ $push: { '_votes': newVote._id } })
-    return res.status(200).json({ success: true });
+    return res.status(200).json({ success: true, data: parent });
 
   } catch(err) {
     return res.status(500).json({
