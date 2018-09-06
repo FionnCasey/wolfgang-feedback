@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import path from 'path'
 
 import { auth, feedbackApp } from './routes';
 import { verifyJwt } from './utils';
@@ -15,7 +16,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3001;
 
-app.get('/', (req, res) => res.status(200).send('Awarewolf Beta'));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 // Middleware.
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,6 +28,10 @@ app.use('/', auth);
 
 // Authorisation required for these routes.
 app.use('/api', verifyJwt, feedbackApp);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
 
 app.listen(PORT, () => console.log(`Running on ${PORT}`));
 
