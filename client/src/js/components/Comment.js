@@ -8,8 +8,12 @@ import { withContext } from '../context';
 
 const Body = styled.div`
   padding: 5px 15px 5px 15px;
-  line-height: 1.5;
+  line-height: 1;
   margin-top: 5px;
+
+  p {
+    margin: 0;
+  }
 `;
 
 const List = styled.ul`
