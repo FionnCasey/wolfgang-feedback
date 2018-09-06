@@ -1,6 +1,6 @@
 if (process.env.NODE_ENV !== 'production') require('dotenv').config({ path: '../.env' });
 
-import { DB_URI } from 'babel-dotenv';
+//import { DB_URI } from 'babel-dotenv';
 
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -31,6 +31,6 @@ app.use('/api', verifyJwt, feedbackApp);
 app.listen(PORT, () => console.log(`Running on ${PORT}`));
 
 // MongoDB configuration.
-mongoose.connect(DB_URI, { useNewUrlParser: true }, () => console.log('Connected to MongoDB'));
+mongoose.connect(process.env.DB_URI, { useNewUrlParser: true }, () => console.log('Connected to MongoDB'));
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import { JWT_SECRET } from 'babel-dotenv';
+//import { JWT_SECRET } from 'babel-dotenv';
 
 const MAX_AGE = '6h';
 
@@ -11,7 +11,7 @@ const signJwt = ({ _id }) => {
 
 const verifyJwt = (req, res, next) => {
   if (!req.headers.token) return res.status(403).json({ message: 'No authorisation token.' });
-  jwt.verify(req.headers.token, JWT_SECRET, (err, decodedToken) => {
+  jwt.verify(req.headers.token, process.env.JWT_SECRET, (err, decodedToken) => {
     if (err) return res.status(403).json({ message: 'Authorisation token invalid.' });
 
     // TODO: Check token id against user db.
