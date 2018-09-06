@@ -24,12 +24,13 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(logger('dev'));
 
-app.use('/', auth);
+app.use('/auth', auth);
 
 // Authorisation required for these routes.
 app.use('/api', verifyJwt, feedbackApp);
 
 app.get('*', (req, res) => {
+  console.log(__dirname);
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
