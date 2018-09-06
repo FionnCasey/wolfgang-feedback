@@ -1,6 +1,6 @@
 class Api {
   constructor() {
-    this.url = '';
+    this.url = 'http://localhost:3001';
   }
 
   makeRequest = async ({ endpoint, payload }) => {

@@ -54,7 +54,6 @@ class CreatePost extends Component {
   };
 
   submitPost = async text => {
-    console.log(text);
     if (this.state.title.length < 6 || text.length < 6) {
       // TODO: error..
       return;
@@ -64,7 +63,7 @@ class CreatePost extends Component {
 		if (!id || !token) {
 			console.log('Must be logged in.');
 			// TODO: Handle this.
-			//return;
+			return;
     }
     
     const res = await api.createPost({

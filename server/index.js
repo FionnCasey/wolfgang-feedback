@@ -1,13 +1,10 @@
 if (process.env.NODE_ENV !== 'production') require('dotenv').config({ path: '../.env' });
 
-//import { DB_URI } from 'babel-dotenv';
-
 import express from 'express';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import path from 'path'
 
 import { auth, feedbackApp } from './routes';
 import { verifyJwt } from './utils';
@@ -16,17 +13,14 @@ const app = express();
 
 const PORT = process.env.PORT || 3001;
 
-app.use(express.static(path.join(__dirname, '../client/build')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'/../client/build/index.html'));
-});
+app.get('/', (req, res) => res.status(200).send('Welcome to the Awarewolf API v1.0.0'));
 
 // Middleware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(logger('dev'));
+
 
 app.use('/auth', auth);
 
