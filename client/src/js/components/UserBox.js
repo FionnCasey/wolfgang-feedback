@@ -10,22 +10,20 @@ const Wrapper = styled.div`
   height: 60px;
   display: flex;
   align-items: center;
-  max-width: ${props => props.maxWidth || 'none'}
+  max-width: ${props => props.maxWidth || 'none'};
+`;
+
+const TextWrap = styled.div`
+  margin-left: 20px;
 
   h2 {
     font-weight: bold;
-    margin: 0 0 0 25px;
     font-size: 18px;
-    position: relative;
-    top: -10px;
+    margin: 0;
   }
-
   p {
     margin: 0;
     font-size: 14px;
-    position: relative;
-    top: 11px;
-    left: -45px;
     color: ${colour.grey[1]};
   }
 `;
@@ -43,8 +41,8 @@ export default ({ user, createdAt, secondary, maxWidth }) => {
   return (
     <Wrapper secondary={secondary} maxWidth={maxWidth}>
       <Image src={logo} />
-      <h2>{ capitaliseWord(user.username) }</h2>
-      <p>{ formatDate(createdAt) }</p>
+      <TextWrap><h2>{ capitaliseWord(user.username) }</h2>
+      <p>{ formatDate(createdAt) }</p></TextWrap>
     </Wrapper>
   );
 }
