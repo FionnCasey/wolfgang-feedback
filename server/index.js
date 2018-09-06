@@ -18,6 +18,11 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+app.get('*', (req, res) => {
+  console.log(__dirname);
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
+
 // Middleware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -28,11 +33,6 @@ app.use('/auth', auth);
 
 // Authorisation required for these routes.
 app.use('/api', verifyJwt, feedbackApp);
-
-app.get('*', (req, res) => {
-  console.log(__dirname);
-  res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
 
 app.listen(PORT, () => console.log(`Running on ${PORT}`));
 
