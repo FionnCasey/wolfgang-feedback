@@ -35,8 +35,13 @@ const Header = styled.div`
 
 const Body = styled.div`
   padding: 5px 15px 5px 15px;
-  line-height: 1.5;
+  line-height: 1.2;
   height: 100px;
+  overflow: hidden;
+
+  p {
+    margin: 0;
+  }
 
   @media only screen and (max-width: 768px) {
     height: 120px;
