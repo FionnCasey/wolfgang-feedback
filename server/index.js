@@ -13,7 +13,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3001;
 
-app.get('/', (req, res) => res.status(200).send('Welcome to the Awarewolf API v1.0.0'));
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 // Middleware.
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,6 +28,10 @@ app.use('/auth', auth);
 app.use('/api', verifyJwt, feedbackApp);
 
 app.listen(PORT, () => console.log(`Running on ${PORT}`));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/../client/build/index.html'));
+});
 
 // MongoDB configuration.
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true }, () => console.log('Connected to MongoDB'));

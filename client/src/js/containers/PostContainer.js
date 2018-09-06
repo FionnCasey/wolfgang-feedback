@@ -47,7 +47,8 @@ class PostContainer extends Component {
 		if (index > -1) {
 			savedId = posts[index]._id;
 		}
-		let newPosts = [...posts];
+
+		
 
 		const res = await api.submitVote({
 			userId: id,
@@ -56,10 +57,6 @@ class PostContainer extends Component {
 			value
 		}, token);
 		if (res.success) {
-			console.log(res);
-			newPosts.splice(newPosts.findIndex(n => n._id === savedId), 1, res.data);
-			this.setState({ posts: newPosts });
-
 			await this.updatePosts();
 			if (savedId) {
 				const viewIndex = this.state.posts.findIndex(n => n._id === savedId);

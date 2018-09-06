@@ -1,6 +1,6 @@
 class Api {
   constructor() {
-    this.url = 'https://wolfgang-api.herokuapp.com';
+    this.url = '';
   }
 
   makeRequest = async ({ endpoint, payload }) => {
