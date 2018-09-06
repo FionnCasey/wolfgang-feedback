@@ -16,11 +16,10 @@ const app = express();
 
 const PORT = process.env.PORT || 3001;
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get('*', (req, res) => {
-  console.log(__dirname);
-  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+  res.sendFile(path.join(__dirname+'/../client/build/index.html'));
 });
 
 // Middleware.
