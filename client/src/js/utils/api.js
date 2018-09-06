@@ -14,7 +14,7 @@ class Api {
 
   login = data => {
     return this.makeRequest({
-      endpoint: '/signup',
+      endpoint: '/login',
       payload: {
         method: 'POST',
         headers: {

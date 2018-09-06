@@ -51,11 +51,19 @@ const Slope = styled.div`
   z-index: -1;
 `;
 
+const Version = styled.div`
+  color: #FFF;
+  font-size: 10px;
+  position: absolute;
+  left: 2px;
+`;
+
 class Header extends Component {
 
   render() {
     return (
       <Wrapper>
+        <Version>version: 1.0.0</Version>
         <Inner>
           <h1>AWAREWOLF</h1>
         </Inner>
