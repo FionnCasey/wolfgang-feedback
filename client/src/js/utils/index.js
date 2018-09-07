@@ -3,7 +3,7 @@ import animation from './animation';
 import * as arrayUtils from './array';
 import colour from './colour';
 import { formatDate } from './date';
-import { capitaliseWord } from './format';
+import { capitaliseWord, formatName } from './format';
 
 export {
   api,
@@ -11,5 +11,6 @@ export {
   arrayUtils,
   colour,
   formatDate,
-  capitaliseWord
+  capitaliseWord,
+  formatName
 };

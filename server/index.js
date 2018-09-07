@@ -6,6 +6,7 @@ import logger from 'morgan';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import path from 'path';
+import validator from 'express-validator';
 
 import { auth, feedbackApp } from './routes';
 import { verifyJwt } from './utils';
@@ -21,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(logger('dev'));
-
+app.use(validator());
 
 app.use('/auth', auth);
 

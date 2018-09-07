@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { capitaliseWord, formatDate, colour } from '../utils';
+import { formatName, formatDate, colour } from '../utils';
 import logo from '../../assets/wg_logo.svg';
 
 const Wrapper = styled.div`
@@ -41,7 +41,7 @@ export default ({ user, createdAt, secondary, maxWidth }) => {
   return (
     <Wrapper secondary={secondary} maxWidth={maxWidth}>
       <Image src={logo} />
-      <TextWrap><h2>{ capitaliseWord(user.username) }</h2>
+      <TextWrap><h2>{ formatName(user.username) }</h2>
       <p>{ formatDate(createdAt) }</p></TextWrap>
     </Wrapper>
   );

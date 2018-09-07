@@ -10,7 +10,7 @@ import { withContext } from '../../context';
 const MAX_CHARS_HEAD = 80;
 const MAX_CHARS_BODY = 160;
 
-const clipText = (text, secondary, isHeader = false) => {
+const clipText = (text, isHeader = false) => {
   if (isHeader) {
     return text.length > MAX_CHARS_HEAD ? `${text.slice(0, MAX_CHARS_HEAD - 3)} ...` : text;
   } else {
@@ -78,7 +78,7 @@ class PostListItem extends Component {
     } = this.props;
 
     const animate = this.state.mouseover && animation.raise;
-
+ 
     const userVote = _votes.find(n => n._user === user.id);
     const vote = userVote ? userVote.value : 0;
 

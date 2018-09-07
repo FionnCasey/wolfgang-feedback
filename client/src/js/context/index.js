@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import api from '../utils';
 
 const Context = React.createContext();
+
+const NOTIFICATION_LIFESPAN = 5000;
 
 class ContextProvider extends Component {
 	state = {
@@ -9,10 +12,12 @@ class ContextProvider extends Component {
 			username: '',
 			token: ''
 		},
-		notifications: []
+		notifications: [],
+		posts: []
 	};
 
 	componentWillMount() {
+		// Try get user data from session storage and log user in.
 		const id = sessionStorage.getItem('wg_id');
 		const username = sessionStorage.getItem('wg_user');
 		const token = sessionStorage.getItem('wg_token');
@@ -25,6 +30,52 @@ class ContextProvider extends Component {
 		});
 	}
 
+	setNotification = message => {
+		const notifications = this.state.notifications.concat([message]);
+		this.setState({ notifications });
+		setTimeout(() => {
+			const notifications = this.state.notifications.slice(0, 1);
+			this.setState({ notifications });
+		}, NOTIFICATION_LIFESPAN);
+	};
+
+	updatePosts = async () => {
+		try {
+			const { token } = this.state.user;
+			const res = await api.fetchPosts(token);
+			if (res.success) {
+				this.setState({ posts: res.data });
+			} else {
+				this.setNotification(res.message);
+			}
+		} catch (err) {
+			this.setNotification(err);
+		}
+	};
+
+	submitVote = async (parentId, value, parentIsPost) => {
+		const { id, token } = this.state.user;
+
+		// Exit if no user values.
+		if (!id || !token) {
+			this.setNotification('Must be logged in.');
+			return;
+		}
+
+		const res = await api.submitVote({
+			userId: id,
+			value,
+			parentId,
+			parentIsPost
+		});
+
+		if (res.success) {
+			
+		} else {
+			this.setNotification(res.message);
+		}
+	};
+
 	render() {
 		return (
 			<Context.Provider value={{
@@ -36,12 +87,12 @@ class ContextProvider extends Component {
 					},
 					login: user => {
 						const newUser = {
-							id: user._id,
+							id: user.id,
 							username: user.username,
 							token: user.token
 						}
 						this.setState({ user: newUser });
-						sessionStorage.setItem('wg_id', user._id);
+						sessionStorage.setItem('wg_id', user.id);
 						sessionStorage.setItem('wg_user', user.username);
 						sessionStorage.setItem('wg_token', user.token);
 					},
@@ -56,7 +107,10 @@ class ContextProvider extends Component {
 						sessionStorage.clear();
 					}
 				},
-				notifications: this.state.notifications
+				notifications: this.state.notifications,
+				setNotification: this.setNotification,
+				posts: this.state.posts,
+				updatePosts: this.updatePosts
 			}}>
 				{this.props.children}
 			</Context.Provider>
@@ -64,7 +118,7 @@ class ContextProvider extends Component {
 	}
 }
 
-function withContext(Component) {
+export default function withContext(Component) {
   return function ConnectedComponent(props) {
     return (
       <Context.Consumer>
@@ -73,5 +127,3 @@ function withContext(Component) {
     );
   }
 }
-
-export { ContextProvider, withContext };

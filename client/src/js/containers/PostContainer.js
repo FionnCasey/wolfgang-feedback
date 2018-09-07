@@ -11,9 +11,9 @@ class PostContainer extends Component {
 	};
 
 	async componentDidMount() {
-		await this.updatePosts();
+		await this.props.context.updatePosts();
 	}
-
+/*
 	async updatePosts() {
 		try {
 			const { token } = this.props.context.user;
@@ -28,7 +28,7 @@ class PostContainer extends Component {
 			console.log(err);
 		}
 	}
-
+*/
 	setViewIndex = index => {
 		this.setState({ index });
 		window.scrollTo(0, 0);

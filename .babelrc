@@ -1,9 +1,6 @@
 {
   "presets": ["env"],
   "plugins": [
-    ["transform-runtime"],
-    ["babel-plugin-dotenv", {
-      "replacedModuleName": "babel-dotenv"
-    }]
+    ["transform-runtime"]
   ]
 }
