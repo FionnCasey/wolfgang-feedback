@@ -31,8 +31,8 @@ const sendConfirmationEmail = async (user, req, res) => {
   };
   transporter.sendMail(mailOptions, (err) => {
     if (err) {
-      console.error(err);
-      return res.status(500).json({ message: 'Error sending verification email.' });
+      console.log('Error: ', err);
+      return res.status(500).json({ messages: ['Error sending verification email.'] });
     }
     return res.status(200).json({ success: true, data: `A verification email has beed sent to ${user.email}.` });
   });
@@ -46,15 +46,15 @@ userController.login = async (req, res) => {
 
   // Check for validation errors.
   const errors = req.validationErrors();
-  if (errors) return res.status(400).json({ message: errors[0].msg });
+  if (errors) return res.status(400).json({ messages: errors.map(e => e.msg) });
 
   try {
     const user = await db.User.findOne({ email: req.body.email });
-    if (!user) return res.status(401).json({ message: 'Email address not found.' });
-    console.log(req.body.password, user.password);
-    if (!comparePasswords(req.body.password, user.password)) return res.status(401).json({ message: 'Invalid email or password.' });
+    if (!user) return res.status(401).json({ messages: ['Email address not found.'] });
+    
+    if (!comparePasswords(req.body.password, user.password)) return res.status(401).json({ messages: 'Invalid email or password.' });
 
-    if (!user.isVerified) return res.status(401).json({ message: 'Account has not been verified.' });
+    if (!user.isVerified) return res.status(401).json({ messages: ['Account has not been verified.'] });
 
     res.status(200).json({
       success: true,
@@ -65,8 +65,8 @@ userController.login = async (req, res) => {
       }
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Database error.' });
+    console.log('Error: ', err);
+    res.status(500).json({ messages: ['Database error.'] });
   }
 };
 
@@ -78,15 +78,15 @@ userController.create = async (req, res) => {
 
   // Check for validation errors.
   const errors = req.validationErrors();
-  if (errors) return res.status(400).json({ message: errors[0].msg });
+  if (errors) return res.status(400).json({ messages: errors.map(e => e.msg) });
 
   try {
     let user = await db.User.findOne({ email: req.body.email });
-    if (user) return res.status(400).json({ message: 'Email is already in use.' });
+    if (user) return res.status(400).json({ messages: ['Email is already in use.'] });
 
     // Check if Wolfgang email.
     if (req.body.email.split('@')[1] !== 'wolfgangdigital.com') {
-      return res.status(401).json({ message: 'Must be a valid Wolfgang email.' });
+      return res.status(401).json({ messages: ['Must be a valid Wolfgang email.'] });
     }
 
     const username = req.body.email.split('@')[0].replace('_', ' ').replace('.', ' ');
@@ -100,8 +100,8 @@ userController.create = async (req, res) => {
     await sendConfirmationEmail(user, req, res);
     
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Database error.' });
+    console.log('Error: ', err);
+    res.status(500).json({ messages: ['Database error.'] });
   }
 };
 
@@ -120,7 +120,7 @@ userController.confirmEmail = async (req, res) => {
     res.status(200).send('Your account has been verified. You may log in now.');
 
   } catch (err) {
-    console.log(err);
+    console.log('Error: ', err);
     res.status(500).send('Database error.');
   }
 };
@@ -132,20 +132,20 @@ userController.resendToken = async (req, res) => {
 
   // Check validation errors.
   const errors = req.validationErrors();
-  if (errors) return res.status(400).json({ message: errors[0].msg });
+  if (errors) return res.status(400).json({ messages: errors.map(e => e.msg) });
 
   try {
     const user = await db.User.findOne({ email: req.email });
 
-    if (!user) return res.status(400).json({ message: 'Unable to find a user with this email.'});
+    if (!user) return res.status(400).json({ messages: ['Unable to find a user with this email.'] });
 
-    if (user.isVerified) return res.status(400).json({ message: 'This account has already been verfied.' });
+    if (user.isVerified) return res.status(400).json({ messages: ['This account has already been verfied.'] });
 
     await sendConfirmationEmail(user, req, res);
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Database error.' });
+    console.log('Error: ', err);
+    res.status(500).json({ messages: ['Database error.'] });
   }
 };
 

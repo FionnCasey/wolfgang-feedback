@@ -5,32 +5,27 @@ const Schema = mongoose.Schema;
 const commentSchema = new Schema({
     _author: { type: Schema.ObjectId, ref: 'User', required: true },
     _parent: { type: Schema.ObjectId, required: true },
-    parentIsPost: { type: Boolean, required: true },
-    text: String,
-    isDeleted: { type: Boolean, default: false },
-    _children: [{ type: Schema.ObjectId, ref: 'Comment' }],
-    _votes: [{ type: Schema.ObjectId, ref: 'Vote' }]
+    text: { 
+      type: String,
+      required: true,
+      trim: true,
+      minlength: [1, 'Comments must be at least 1 character long.']
+    },
+    _votes: [{ type: Schema.ObjectId, ref: 'Vote' }],
+    _comments: [{ type: Schema.ObjectId, ref: 'Comment' }],
+    isDeleted: { type: Boolean, default: false }
 }, { timestamps: true });
 
-function populateComment(next){
+function populateAuthor(next) {
   this.populate({
-    path: '_author',
-    select: 'username _id'
-  });
-  this.populate({
-    path: '_children',
-    select: '_id text _author createdAt updatedAt',
-    match: { isDeleted: false }
-  });
-  this.populate({
-    path: '_votes',
-    select: 'value _id _user'
+      path: '_author',
+      select: 'username _id'
   });
   next();
-};
+}
 
-commentSchema.pre('find', populateComment)
-             .pre('findOne', populateComment)
-             .pre('findOneAndUpdate', populateComment);;
+commentSchema.pre('find', populateAuthor)
+             .pre('findOne', populateAuthor)
+             .pre('findOneAndUpdate', populateAuthor);
 
 export default mongoose.model('Comment', commentSchema);

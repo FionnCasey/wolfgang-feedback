@@ -2,115 +2,113 @@ import db from '../models';
 
 const postController = {};
 
-
-postController.getAll = async (req, res) => {
-    try {
-        const posts = await db.Post.find({ isDeleted: false })
-          .populate({
-            path: '_children'
-          });
-        return res.status(200).json({
-            success: true,
-            data: posts
-        });
-    } catch(err) {
-        res.status(500).json({
-            message: err.toString()
-        });
-    }
+postController.fetch = async (req, res) => {
+  try {
+    const posts = await db.Post.find({ isDeleted: false })
+      .populate({
+        path: '_comments',
+        select: '-isDeleted'
+      });
+    res.status(200).json({
+      success: true,
+      data: posts
+    });
+  } catch (err) {
+    console.log('Error: ', err);
+    res.status(500).json({ messages: ['Database error.'] });
+  }
 };
 
-postController.getById = async (req, res) => {
-    const { id } = req.params;
+postController.findById = async (req, res) => {
+  req.check('id', 'No post ID.').notEmpty();
 
-    try {
-        const post = await db.Post.findById(id);
-
-        if (!post) {
-          return res.status(500).json({
-            message: 'Error locating post.'
-          });
-        }
-
-        if (post.isDeleted) {
-          return res.status(500).json({
-            message: 'This post has been deleted.'
-          });
-        }
-
-        return res.status(200).json({
-            success: true,
-            data: post
-        });
-    } catch(err) {
-        res.status(500).json({
-            message: err.toString()
-        });
-    }
-};
-
-postController.update = async (req, res) => {
-  const { id } = req.params;
-  const { userId, newTitle, newText, newCategory } = req.body;
+  // Check for validation errors.
+  const errors = req.validationErrors();
+  if (errors) return res.status(400).json({ messages: errors.map(e => e.msg) });
 
   try {
-    const { title, text, category } = await db.Post.findOne({ _id: id, _author: userId, isDeleted: false });
+    const post = await db.Post.findById(req.params.id);
+    if (!post) return res.status(400).json({ messages: ['Unable to locate post.'] });
 
-    const updatedPost = await db.Post.findOneAndUpdate(
-      { _id: id, _author: userId },
-      { title: newTitle || title,
-        text: newText || text,
-        category: newCategory || category },
-      { new: true }
-    );
+    if (post.isDeleted) return res.status(400).json({ messages: ['This post has been deleted.'] });
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
-      data: updatedPost
+      data: post
     });
-
-  } catch(err) {
-    res.status(500).json({
-      message: err.toString()
-    });
+  } catch (err) {
+    console.log('Error: ', err);
+    res.status(500).json({ messages: ['Database error.'] });
   }
 };
 
 postController.create = async (req, res) => {
-    const { title, text, userId } = req.body;
+  req.check('title', 'Title must be at least 6 characters.').len(6);
+  req.check('text', 'Text must be at least 1 character.').len(1);
 
-    // TODO: Validate. Get UID from JWT
+  // Check for validation errors.
+  const errors = req.validationErrors();
+  if (errors) return res.status(400).json({ messages: errors.map(e => e.msg) });
 
-    const post = new db.Post({ title, text, _author: userId });
-
-    try {
-        const newPost = await post.save();
-        res.status(201).json({
-            success: true,
-            data: newPost
-        });
-    } catch (err) {
-      res.status(500).json({
-        message: err.toString()
-      });
-    }
-};
-
-postController.delete = async (req, res) => {
-  const { id } = req.params;
-  const { userId } = req.body;
+  const post = new db.Post({
+      title: req.body.title,
+      text: req.body.text,
+      _author: req.user._id
+  });
 
   try {
-    await db.Post.findOneAndUpdate({
-      _id: id, _author: userId
-    }, { isDeleted: true });
+    await post.save();
+    return res.status(200).json({
+      success: true,
+      data: post
+    });
+  } catch (err) {
+    console.log('Error: ', err);
+    res.status(500).json({ messages: ['Database error.'] });
+  }
+};
 
-    res.status(200).json({ success: true });
+postController.vote = async (req, res) => {
+  req.check('id', 'Post ID cannot be blank.').notEmpty();
+  req.check('value', 'Value cannot be blank.').notEmpty();
+  req.check('value', 'Value must be 1 or -1.').isIn([1, -1]);
 
-  } catch(err) {
-      res.status(500).json({
-        message: err.toString()
-      });
+  // Check for validation errors.
+  const errors = req.validationErrors();
+  if (errors) return res.status(400).json({ messages: errors.map(e => e.msg) });
+
+  const { value } = req.body;
+
+  try {
+    const post = await db.Post.findById(req.params.id);
+    if (!post) return res.status(400).json({ messages: ['Unable to locate post.'] });
+
+    let vote = await db.Vote.findOne({ _user: req.user._id, _parent: req.params.id });
+    console.log('vote:', vote)
+    if (!vote) {
+      // No vote yet so add a new one.
+      vote = new db.Vote({ _user: req.user._id, _parent: req.params.id, value });
+      await vote.save();
+      await post.update({ $push: { '_votes': vote._id } });
+      console.log('new: ', vote.value, value)
+    } else if (vote.value === value) {
+      // Same vote value so remove.
+      console.log('same:', vote.value, value)
+      await post.update({ $pull: { '_votes': vote._id } });
+      await db.Vote.findByIdAndRemove(vote._id);
+
+    } else {
+      // Different vote value so update.
+      console.log('different')
+      await vote.update({ $set: { 'value': value } });
+    }
+    return res.status(200).json({
+      success: true,
+      data: post
+    });
+  } catch (err) {
+    console.log('Error: ', err);
+    res.status(500).json({ messages: ['Database error.'] });
   }
 };
 

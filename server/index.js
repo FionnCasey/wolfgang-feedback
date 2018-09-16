@@ -8,7 +8,7 @@ import cors from 'cors';
 import path from 'path';
 import validator from 'express-validator';
 
-import { auth, feedbackApp } from './routes';
+import { auth, awarewolf } from './routes';
 import { verifyJwt } from './utils';
 
 const app = express();
@@ -27,7 +27,7 @@ app.use(validator());
 app.use('/auth', auth);
 
 // Authorisation required for these routes.
-app.use('/api', verifyJwt, feedbackApp);
+app.use('/api', verifyJwt, awarewolf);
 
 app.listen(PORT, () => console.log(`Running on ${PORT}`));
 
@@ -36,6 +36,6 @@ app.get('*', (req, res) => {
 });
 
 // MongoDB configuration.
-mongoose.connect(process.env.DB_URI, { useNewUrlParser: true }, () => console.log('Connected to MongoDB'));
+mongoose.connect(process.env.TEST_DB_URI, { useNewUrlParser: true }, () => console.log('Connected to MongoDB'));
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

@@ -1,7 +1,7 @@
 import auth from './auth';
-import feedbackApp from './feedbackApp';
+import awarewolf from './awarewolf';
 
 export {
   auth,
-  feedbackApp
+  awarewolf
 };
