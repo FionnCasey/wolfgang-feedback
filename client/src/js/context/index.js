@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import api from '../utils';
+import { api } from '../utils';
 
 const Context = React.createContext();
 
 const NOTIFICATION_LIFESPAN = 5000;
 
-class ContextProvider extends Component {
+export class ContextProvider extends Component {
 	state = {
 		user: {
 			id: '',
@@ -13,22 +13,39 @@ class ContextProvider extends Component {
 			token: ''
 		},
 		notifications: [],
-		posts: []
+		posts: [],
+		activePost: {}
 	};
 
 	componentWillMount() {
 		// Try get user data from session storage and log user in.
-		const id = sessionStorage.getItem('wg_id');
-		const username = sessionStorage.getItem('wg_user');
-		const token = sessionStorage.getItem('wg_token');
-		if (id && username && token) this.setState({
+		const data = sessionStorage.getItem('wolfganger');
+		if (data) {
+			const user = JSON.parse(data);
+			this.setState({ user });
+		}
+	}
+
+	loggedIn = () => {
+		const { id, username, token } = this.state.user;
+		return id && username && token;
+	};
+
+	login = user => {
+		this.setState({ user });
+		sessionStorage.setItem('wolfganger', JSON.stringify(user));
+	};
+
+	logout = () => {
+		this.setState({
 			user: {
-				id,
-				username,
-				token
+				id: '',
+				username: '',
+				token: ''
 			}
 		});
-	}
+		sessionStorage.clear();
+	};
 
 	setNotification = message => {
 		const notifications = this.state.notifications.concat([message]);
@@ -54,23 +71,30 @@ class ContextProvider extends Component {
 	};
 
 	submitVote = async (parentId, value, parentIsPost) => {
-		const { id, token } = this.state.user;
-
-		// Exit if no user values.
-		if (!id || !token) {
+		if (!this.loggedIn()) {
 			this.setNotification('Must be logged in.');
 			return;
 		}
-
+		console.log('Submit VOte!');
+		
+		const { id, token } = this.state.user;
 		const res = await api.submitVote({
 			userId: id,
 			value,
 			parentId,
 			parentIsPost
-		});
+		}, token);
 
 		if (res.success) {
-			
+			let posts = [...this.state.posts];
+			posts.splice(posts.findIndex(n => n._id === res.data._id), 1, res.data);
+			this.setState({ posts });
+			console.log(res.data);
+
+			// Set response as active post if ids match.
+			if (this.state.activePost._id === res.data._id) {
+				this.setState({ activePost: res.data });
+			}
 		} else {
 			this.setNotification(res.message);
 		}
@@ -81,36 +105,15 @@ class ContextProvider extends Component {
 			<Context.Provider value={{
 				user: {
 					...this.state.user,
-					loggedIn: () => {
-						const { id, username, token } = this.state.user;
-						return id && username && token;
-					},
-					login: user => {
-						const newUser = {
-							id: user.id,
-							username: user.username,
-							token: user.token
-						}
-						this.setState({ user: newUser });
-						sessionStorage.setItem('wg_id', user.id);
-						sessionStorage.setItem('wg_user', user.username);
-						sessionStorage.setItem('wg_token', user.token);
-					},
-					logout: () => {
-						this.setState({
-							user: {
-								id: '',
-								username: '',
-								token: ''
-							}
-						});
-						sessionStorage.clear();
-					}
+					loggedIn: this.loggedIn,
+					login: this.login,
+					logout: this.logout
 				},
 				notifications: this.state.notifications,
 				setNotification: this.setNotification,
 				posts: this.state.posts,
-				updatePosts: this.updatePosts
+				updatePosts: this.updatePosts,
+				submitVote: this.submitVote
 			}}>
 				{this.props.children}
 			</Context.Provider>

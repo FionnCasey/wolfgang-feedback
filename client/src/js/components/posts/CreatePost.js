@@ -3,7 +3,7 @@ import PostEditor from './PostEditor';
 import PostNav from './PostNav';
 import styled from 'styled-components';
 import { colour, animation, api } from '../../utils';
-import { withContext } from '../../context';
+import withContext from '../../context';
 
 const Wrapper = styled.div`
   padding: 10px 25px 25px 25px;

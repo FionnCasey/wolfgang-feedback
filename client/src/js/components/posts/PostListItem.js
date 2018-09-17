@@ -5,7 +5,7 @@ import { GridItem } from 'styled-grid-responsive';
 import { colour, animation } from '../../utils';
 import ButtonBar from '../ButtonBar';
 import UserBox from '../UserBox';
-import { withContext } from '../../context';
+import withContext from '../../context';
 
 const MAX_CHARS_HEAD = 80;
 const MAX_CHARS_BODY = 160;

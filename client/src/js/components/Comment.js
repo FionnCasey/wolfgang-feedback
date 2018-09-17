@@ -4,7 +4,7 @@ import { colour, arrayUtils } from '../utils';
 import Card from './Card';
 import UserBox from './UserBox';
 import IconButton from './IconButton';
-import { withContext } from '../context';
+import withContext from '../context';
 
 const Body = styled.div`
   padding: 5px 15px 5px 15px;

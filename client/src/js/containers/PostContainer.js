@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { api } from '../utils';
 import { Notification, PostList, Post } from '../components';
-import { withContext } from '../context';
+import withContext from '../context';
 
 class PostContainer extends Component {
 	state = {
@@ -91,8 +91,9 @@ class PostContainer extends Component {
 	};
 
 	render() {
-		const { index, posts, error } = this.state;
+		const { index, error } = this.state;
 		const { setView } = this.props;
+		const { posts } = this.props.context;
 
 		return (
 			<div>

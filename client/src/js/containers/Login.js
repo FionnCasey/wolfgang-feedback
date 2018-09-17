@@ -4,7 +4,7 @@ import { BackgroundImage } from '../components';
 import { colour, api } from '../utils';
 import signupImg from '../../assets/Sign_Up_Illustration.png';
 import loginImg from '../../assets/Login_Illustration.png';
-import { withContext } from '../context';
+import withContext from '../context';
 
 const Wrapper = styled.div`
 	display: flex;

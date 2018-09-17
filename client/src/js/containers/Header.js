@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { withContext } from '../context';
+import withContext from '../context';
 import { colour } from '../utils';
 
 const Wrapper = styled.div`

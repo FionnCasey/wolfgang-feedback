@@ -13,6 +13,9 @@ voteController.create = async (req, res) => {
     const existingVote = await db.Vote.findOne({ _user: userId, _parent: parentId });
     const parent = parentIsPost ? await db.Post.findById(parentId) : await db.Comment.findById(parentId);
 
+    // TODO: Refactor.
+    const responseData = !parentIsPost ? await db.Post.findById(parent._parent) : parent;
+
     if (existingVote) {
       await db.Vote.findOneAndUpdate(
         { _user: userId, _parent: parentId },
@@ -20,14 +23,17 @@ voteController.create = async (req, res) => {
       );
       return res.status(200).json({
         success: true,
-        data: parent
+        data: responseData
       });
     }
 
     const newVote = await vote.save();
 
     await parent.update({ $push: { '_votes': newVote._id } })
-    return res.status(200).json({ success: true, data: parent });
+    return res.status(200).json({
+      success: true,
+      data: responseData
+    });
 
   } catch(err) {
     return res.status(500).json({

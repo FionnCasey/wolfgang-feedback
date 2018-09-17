@@ -51,7 +51,7 @@ userController.login = async (req, res) => {
   try {
     const user = await db.User.findOne({ email: req.body.email });
     if (!user) return res.status(401).json({ message: 'Email address not found.' });
-    console.log(req.body.password, user.password);
+    
     if (!comparePasswords(req.body.password, user.password)) return res.status(401).json({ message: 'Invalid email or password.' });
 
     if (!user.isVerified) return res.status(401).json({ message: 'Account has not been verified.' });

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import IconButton from './IconButton';
 import { arrayUtils, colour } from '../utils';
+import withContext from '../context';
 
 const Wrapper = styled.ul`
   width: 100%;
@@ -40,9 +41,10 @@ const Comments = styled.div`
   color: ${props => (props.secondary ? colour.grey[0] : '#FFF')};
 `;
 
-export default ({ secondary, comments, votes, isPost, submitVote, id, vote }) => {
+const ButtonBar = ({ secondary, comments, votes, isPost, context, id, vote }) => {
   const { up, down } = arrayUtils.countVotes(votes);
   const commentCount = arrayUtils.countChildren(comments);
+  const { submitVote } = context;
 
   return (
     <Wrapper>
@@ -64,3 +66,5 @@ export default ({ secondary, comments, votes, isPost, submitVote, id, vote }) =>
     </Wrapper>
   );
 };
+
+export default withContext(ButtonBar);

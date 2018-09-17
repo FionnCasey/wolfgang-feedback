@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const voteSchema = new Schema({
     _user: { type: Schema.ObjectId, ref: 'User', required: true },
 		_parent: { type: Schema.ObjectId, required: true },
-    parentIsPost: { type: Boolean, required: true },
+    parentIsPost: { type: Boolean },
 		value: { type: Number, required: true }
 });
 

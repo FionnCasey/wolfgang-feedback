@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withContext } from '../context';
+import withContext from '../context';
 import styled from 'styled-components';
 import { Grid } from 'styled-grid-responsive';
 import PostContainer from './PostContainer';
