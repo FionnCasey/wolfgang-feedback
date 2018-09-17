@@ -15,6 +15,7 @@ const postSchema = new Schema({
     minlength: [1, 'Text must be at least 1 character long.'] 
   },
   isDeleted: { type: Boolean, default: false },
+  isResolved: { type: Boolean, default: false },
   _comments: [{ type: Schema.ObjectId, ref: 'Comment' }],
   _votes: [{ type: Schema.ObjectId, ref: 'Vote' }],
 }, { timestamps: true });
@@ -26,7 +27,7 @@ function populate(next) {
   });
   this.populate({
     path: '_votes',
-    select: '_id value'
+    select: '_user value'
   });
   next();
 }

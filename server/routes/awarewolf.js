@@ -18,8 +18,8 @@ router.post('/posts/:id/vote', postController.vote);
 
 // Comment routes.
 //router.get('/comments', commentController.fetch);
-//router.get('/comments/:id', commentController.findById);
-//router.post('/comments', commentController.create);
+router.get('/comments/:id', commentController.findByPostId);
+router.post('/comments/:id', commentController.comment);
 //router.post('/comments/:id/vote', postController.vote);
 
 export default router;

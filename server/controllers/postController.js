@@ -68,6 +68,9 @@ postController.create = async (req, res) => {
   }
 };
 
+// Vote on a post.
+// Limited to 1 voter per user.
+// Votes are either +1 or -1.
 postController.vote = async (req, res) => {
   req.check('id', 'Post ID cannot be blank.').notEmpty();
   req.check('value', 'Value cannot be blank.').notEmpty();
@@ -80,29 +83,61 @@ postController.vote = async (req, res) => {
   const { value } = req.body;
 
   try {
-    const post = await db.Post.findById(req.params.id);
+    let post = await db.Post.findById(req.params.id);
     if (!post) return res.status(400).json({ messages: ['Unable to locate post.'] });
 
+    if (post.isDeleted) return res.status(400).json({ messages: ['This post has been deleted.'] });
+
+    if (post.isResolved) return res.status(400).json({ messages: ['This post has been resolved.'] });
+
     let vote = await db.Vote.findOne({ _user: req.user._id, _parent: req.params.id });
-    console.log('vote:', vote)
+
     if (!vote) {
       // No vote yet so add a new one.
       vote = new db.Vote({ _user: req.user._id, _parent: req.params.id, value });
       await vote.save();
       await post.update({ $push: { '_votes': vote._id } });
-      console.log('new: ', vote.value, value)
+
     } else if (vote.value === value) {
       // Same vote value so remove.
-      console.log('same:', vote.value, value)
       await post.update({ $pull: { '_votes': vote._id } });
       await db.Vote.findByIdAndRemove(vote._id);
 
     } else {
       // Different vote value so update.
-      console.log('different')
       await vote.update({ $set: { 'value': value } });
+
     }
+    post = await db.Post.findById(req.params.id);
     return res.status(200).json({
+      success: true,
+      data: post
+    });
+  } catch (err) {
+    console.log('Error: ', err);
+    res.status(500).json({ messages: ['Database error.'] });
+  }
+};
+
+// Admin control to set post as resolved.
+// Resolved posts cannot be commented or voted on.
+postController.resolve = async (req, res) => {
+  req.check('id', 'Post ID cannot be blank.').notEmpty();
+
+  // Check for validation errors.
+  const errors = req.validationErrors();
+  if (errors) return res.status(400).json({ messages: errors.map(e => e.msg) });
+
+  // Validate user permissions.
+  if (!req.user.roles.find('admin')) return res.status(401).json({ messages: ['Unauthorised action.'] });
+
+  try {
+    const post = await db.Post.findByIdAndUpdate(
+      req.params.id,
+      { $set: { 'isResolved': true } },
+      { new: true }
+    );
+    res.status(200).json({
       success: true,
       data: post
     });

@@ -21,6 +21,10 @@ function populateAuthor(next) {
       path: '_author',
       select: 'username _id'
   });
+  this.populate({
+    path: '_votes',
+    select: '_user value'
+  });
   next();
 }
 
