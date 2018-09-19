@@ -4,12 +4,13 @@ const Schema = mongoose.Schema;
 
 const commentSchema = new Schema({
     _author: { type: Schema.ObjectId, ref: 'User', required: true },
+    _rootPost: { type: Schema.ObjectId, ref: 'Post', required: true },
     _parent: { type: Schema.ObjectId, required: true },
     text: { 
       type: String,
       required: true,
       trim: true,
-      minlength: [1, 'Comments must be at least 1 character long.']
+      minlength: [2, 'Comments must be at least 2 characters long.']
     },
     _votes: [{ type: Schema.ObjectId, ref: 'Vote' }],
     _comments: [{ type: Schema.ObjectId, ref: 'Comment' }],
@@ -24,6 +25,10 @@ function populateAuthor(next) {
   this.populate({
     path: '_votes',
     select: '_user value'
+  });
+  this.populate({
+    path: '_comments',
+    match: { isDeleted: false }
   });
   next();
 }

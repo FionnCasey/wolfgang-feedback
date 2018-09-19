@@ -22,8 +22,13 @@ const postSchema = new Schema({
 
 function populate(next) {
   this.populate({
-      path: '_author',
-      select: 'username _id'
+    path: '_author',
+    select: 'username _id'
+  });
+  this.populate({
+    path: '_comments',
+    select: '_id text',
+    match: { isDeleted: false }
   });
   this.populate({
     path: '_votes',

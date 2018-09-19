@@ -9,11 +9,11 @@ const signJwt = ({ _id }) => {
 };
 
 const verifyJwt = (req, res, next) => {
-  if (!req.headers.token) return res.status(401).json({ message: ['No authorisation token.'] });
+  if (!req.headers.token) return res.status(401).json({ messages: ['No authorisation token.'] });
 
   // Verify token.
   jwt.verify(req.headers.token, process.env.JWT_SECRET, (err, decodedToken) => {
-    if (err) return res.status(401).json({ message: ['Invalid authorisation token.'] });
+    if (err) return res.status(401).json({ messages: ['Invalid authorisation token.'] });
     // Check is a valid user.
     db.User.findById(decodedToken._id)
       .then(user => {

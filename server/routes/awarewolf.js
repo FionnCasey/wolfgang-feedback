@@ -4,9 +4,7 @@ import { postController, commentController } from '../controllers';
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.status(200).send('Wolfgang Feedback App Beta');
-});
+router.get('/', (req, res) => res.status(200).send('Wolfgang Feedback App Beta'));
 
 // Post routes.
 router.get('/posts', postController.fetch);
@@ -17,9 +15,8 @@ router.post('/posts', postController.create);
 router.post('/posts/:id/vote', postController.vote);
 
 // Comment routes.
-//router.get('/comments', commentController.fetch);
 router.get('/comments/:id', commentController.findByPostId);
-router.post('/comments/:id', commentController.comment);
-//router.post('/comments/:id/vote', postController.vote);
+router.post('/comments', commentController.create);
+router.post('/comments/:id/vote', commentController.vote);
 
 export default router;

@@ -5,10 +5,6 @@ const postController = {};
 postController.fetch = async (req, res) => {
   try {
     const posts = await db.Post.find({ isDeleted: false })
-      .populate({
-        path: '_comments',
-        select: '-isDeleted'
-      });
     res.status(200).json({
       success: true,
       data: posts
@@ -28,8 +24,6 @@ postController.findById = async (req, res) => {
 
   try {
     const post = await db.Post.findById(req.params.id);
-    if (!post) return res.status(400).json({ messages: ['Unable to locate post.'] });
-
     if (post.isDeleted) return res.status(400).json({ messages: ['This post has been deleted.'] });
 
     res.status(200).json({
@@ -44,7 +38,7 @@ postController.findById = async (req, res) => {
 
 postController.create = async (req, res) => {
   req.check('title', 'Title must be at least 6 characters.').len(6);
-  req.check('text', 'Text must be at least 1 character.').len(1);
+  req.check('text', 'Text must be at least 2 character.').len(2);
 
   // Check for validation errors.
   const errors = req.validationErrors();
@@ -83,9 +77,9 @@ postController.vote = async (req, res) => {
   const { value } = req.body;
 
   try {
-    let post = await db.Post.findById(req.params.id);
-    if (!post) return res.status(400).json({ messages: ['Unable to locate post.'] });
-
+    const post = await db.Post.findById(req.params.id);
+    if (!post) return res.status(400).json({ messages: ['Invalid post ID.'] });
+    
     if (post.isDeleted) return res.status(400).json({ messages: ['This post has been deleted.'] });
 
     if (post.isResolved) return res.status(400).json({ messages: ['This post has been resolved.'] });
@@ -108,10 +102,10 @@ postController.vote = async (req, res) => {
       await vote.update({ $set: { 'value': value } });
 
     }
-    post = await db.Post.findById(req.params.id);
+    const updatedPost = await db.Post.findById(req.params.id);
     return res.status(200).json({
       success: true,
-      data: post
+      data: updatedPost
     });
   } catch (err) {
     console.log('Error: ', err);
@@ -137,6 +131,8 @@ postController.resolve = async (req, res) => {
       { $set: { 'isResolved': true } },
       { new: true }
     );
+    if (!post) return res.status(400).json({ messages: ['Invalid post ID.'] });
+
     res.status(200).json({
       success: true,
       data: post
