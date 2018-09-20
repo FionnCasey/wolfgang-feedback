@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { injectGlobal } from 'styled-components';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { apiActions } from './actions';
@@ -40,12 +40,13 @@ class App extends Component {
 
 	render() {
 		return (
-			<BrowserRouter>
-				<div>
-					<Route exact path='/' component={Login} /> :
-					<Route path='/posts' component={PostList} />
-				</div>
-			</BrowserRouter>
+			<Router>
+				<Switch>
+					<Route exact path='/' component={Login} />
+					<Route exact path='/posts' component={PostList} />
+					<Route path='/posts/:postId' component={Login} />
+				</Switch>
+			</Router>
 		);
 	}
 }

@@ -1,27 +1,32 @@
 import React from 'react';
-import { Col } from 'reactstrap';
+import { GridItem } from 'styled-grid-responsive';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 const Post = styled.div`
+  cursor: pointer;
   background: palevioletred;
 `;
 
-const PostListItem = props => {
-  const { _id, title, text } = props.post;
-
+const PostListItem = ({ _id, title, text }) => {
   return (
-    <Col sm='3' md='3'>
-      <Post>
+    <GridItem col={1/4} media={{ phone: 1, tablet: 1/3 }}>
+      <Post onClick={e => e.stopPropagation() & onClick(_id)}>
         <h2>{ title }</h2>
         <p>{ text }</p>
       </Post>
-    </Col>
+    </GridItem>
   );
 };
 
 PostListItem.propTypes = {
-  post: PropTypes.object
+  post: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    _author: PropTypes.object.isRequired,
+    title: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired
+  }),
+  onClick: PropTypes.func.isRequired
 };
 
 export default PostListItem;

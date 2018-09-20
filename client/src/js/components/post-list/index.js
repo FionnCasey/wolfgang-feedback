@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { apiActions } from '../../actions';
 import PropTypes from 'prop-types';
-import PostList from './PostList';
 import PostListItem from './PostListItem';
+import { Grid } from 'styled-grid-responsive';
 
 const mapStateToProps = state => {
   return {
     user: state.apiState.user,
-    posts: state.apiState.posts
+    posts: state.apiState.posts,
+    activePostId: state.viewState.activePostId
   };
 };
 
@@ -18,7 +19,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-class PostContainer extends Component {
+class PostList extends Component {
   componentDidUpdate(prevProps) {
     const { user } = this.props;
     if (!prevProps.user && user) {
@@ -27,15 +28,25 @@ class PostContainer extends Component {
   }
 
   render() {
+    const { posts, setActivePostId } = this.props;
+
     return (
-      <PostList>
-        { this.props.posts.map(post => <PostListItem key={post._id} post={post} />) }
-      </PostList>
+      <Grid center>
+        { 
+          posts.map(post => (
+            <PostListItem
+              key={post._id} 
+              post={post} 
+              onClick={setActivePostId}
+            />
+          ))
+        }
+      </Grid>
     )
   }
 }
 
-PostContainer.propTypes = {
+PostList.propTypes = {
   user: PropTypes.object,
 
   posts: PropTypes.arrayOf(
@@ -52,4 +63,4 @@ PostContainer.propTypes = {
   fetchPosts: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(PostList);
