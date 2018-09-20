@@ -12,7 +12,7 @@ const countVotes = votes => {
 	}, vals) || vals;
 };
 
-const sortModes = {
+const sortMethods = {
   none: (a, b) => 0,
   
   byMostRecent: (a, b) => moment(a.createdAt).isBefore(moment(b.createdAt)) ? 1 : -1,
@@ -24,7 +24,7 @@ const sortModes = {
 	byCommentsAscending: (a, b) => countChildren(a._children) < countChildren(b._children) ? 1 : -1
 };
 
-const filterModes = {
+const filterMethods = {
 	none: n => true,
 
 	hasPositiveScore: n => sumVotes(n._votes) > 0,
@@ -45,7 +45,7 @@ const countChildren = root => {
 export {
 	sumVotes,
 	countVotes,
-	sortModes,
+	sortMethods,
 	countChildren,
-	filterModes
+	filterMethods
 };

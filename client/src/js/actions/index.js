@@ -1,4 +1,4 @@
-import * as apiActions from './api';
+import * as apiActions from './apiActions';
 
 export {
   apiActions

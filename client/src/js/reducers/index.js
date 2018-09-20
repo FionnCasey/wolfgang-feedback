@@ -1,8 +1,8 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { devToolsEnhancer } from 'redux-devtools-extension';
-import apiReducer from './api';
-import viewReducer from './view';
+import apiReducer from './apiReducer';
+import viewReducer from './viewReducer';
 
 const rootReducer = combineReducers({
   apiState: apiReducer,

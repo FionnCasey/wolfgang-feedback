@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { apiActions } from '../../actions';
 import PropTypes from 'prop-types';
+import PostList from './PostList';
+import PostListItem from './PostListItem';
 
 const mapStateToProps = state => {
   return {
@@ -16,7 +18,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-class PostList extends Component {
+class PostContainer extends Component {
   componentDidUpdate(prevProps) {
     const { user } = this.props;
     if (!prevProps.user && user) {
@@ -26,26 +28,16 @@ class PostList extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Posts</h1>
-        <ul>
-          {
-            this.props.posts.map(n => <li key={n._id}>{n.title} - Comments: {n._comments.length}</li>)
-          }
-        </ul>
-      </div>
+      <PostList>
+        { this.props.posts.map(post => <PostListItem key={post._id} post={post} />) }
+      </PostList>
     )
   }
 }
 
-PostList.propTypes = {
-  user: PropTypes.objectOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      token: PropTypes.string.isRequired,
-      username: PropTypes.string.isRequired
-    })
-  ),
+PostContainer.propTypes = {
+  user: PropTypes.object,
+
   posts: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
@@ -60,4 +52,4 @@ PostList.propTypes = {
   fetchPosts: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostList);
+export default connect(mapStateToProps, mapDispatchToProps)(PostContainer);
